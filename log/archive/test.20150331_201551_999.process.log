@@ -1,0 +1,48 @@
+Tue 2015.03.31 20:13:27.838 +0100	LogWriter	START
+Logging started
+
+Tue 2015.03.31 20:13:27.842 +0100	PROCESS_TEST	START
+Start logging
+
+Tue 2015.03.31 20:13:27.842 +0100	PROCESS_TEST	INFO
+Test config
+  logFile	.\\log\\test.process.log
+        processes.echo.process.class	Echo
+          processes.echo.logging.*.*	true
+          processes.echo.logging.*.DEBUG	false
+        processes.echo.message.testMessage	### echo body ###
+        processes.echo.result.testMessage	### echo body ###
+
+Tue 2015.03.31 20:13:27.858 +0100	PROCESS_TEST	INFO
+Run all tests
+
+Tue 2015.03.31 20:13:47.859 +0100	PROCESS_TEST	INFO
+Test:echo
+
+Tue 2015.03.31 20:13:50.179 +0100	PROCESS_TEST	INFO
+Config
+    process.class	Echo
+      logging.*.*	true
+      logging.*.DEBUG	false
+    message.testMessage	### echo body ###
+    result.testMessage	### echo body ###
+
+Tue 2015.03.31 20:14:56.526 +0100	Echo@ProcessFactory	START
+Start logging
+
+Tue 2015.03.31 20:15:22.187 +0100	PROCESS_TEST	DEBUG
+process.start
+
+Tue 2015.03.31 20:15:51.979 +0100	PROCESS_TEST	ERROR
+Exception during test
+Exception:
+java.lang.NullPointerException
+	at lexa.core.process.Echo.onProcess(Echo.java:95)
+	at lexa.core.process.RequestProcess.process(RequestProcess.java:303)
+	at lxprocess.ProcessTest.test(ProcessTest.java:149)
+	at lxprocess.ProcessTest.testAll(ProcessTest.java:99)
+	at lxprocess.ProcessTest.main(ProcessTest.java:65)
+
+Tue 2015.03.31 20:15:51.987 +0100	PROCESS_TEST	INFO
+Full test run complete
+

@@ -1,0 +1,112 @@
+Thu 2015.04.02 06:26:19.401 +0100	LogWriter	START
+Logging started
+
+Thu 2015.04.02 06:26:19.401 +0100	PROCESS_TEST	START
+Start logging
+
+Thu 2015.04.02 06:26:19.405 +0100	PROCESS_TEST	INFO
+Test config
+  logFile	.\\log\\test.process.log
+        processes.echo.process.class	Echo
+          processes.echo.logging.*.*	true
+        processes.echo.message.service	echo
+        processes.echo.message.message	echo
+          processes.echo.message.request.testMessage	### echo body ###
+        processes.echo.result.testMessage	### echo body ###
+        processes.passThrough.process.class	PassThrough
+          processes.passThrough.process.config.allowAnonymous	false
+            processes.passThrough.process.config.serviceList.echo	echo
+          processes.passThrough.logging.*.*	true
+        processes.passThrough.message.service	echo
+        processes.passThrough.message.message	echo
+          processes.passThrough.message.request.testMessage	### pass through ###
+          processes.passThrough.replies.1.service	echo
+          processes.passThrough.replies.1.message	echo
+          processes.passThrough.replies.1.request.testMessage	###	pass through ###
+          processes.passThrough.replies.1.reply.testMessage	###	pass through ###
+          processes.passThrough.replies.1.close	true
+        processes.passThrough.result.testMessage	### pass through ###
+
+Thu 2015.04.02 06:26:19.417 +0100	PROCESS_TEST	INFO
+Run all tests
+
+Thu 2015.04.02 06:26:19.417 +0100	PROCESS_TEST	INFO
+Test:echo
+
+Thu 2015.04.02 06:26:19.421 +0100	PROCESS_TEST	INFO
+Config
+    process.class	Echo
+      logging.*.*	true
+    message.service	echo
+    message.message	echo
+      message.request.testMessage	### echo body ###
+    result.testMessage	### echo body ###
+
+Thu 2015.04.02 06:26:19.485 +0100	Echo@ProcessFactory	START
+Start logging
+
+Thu 2015.04.02 06:26:28.066 +0100	PROCESS_TEST	DEBUG
+process.start
+
+Thu 2015.04.02 06:26:28.070 +0100	PROCESS_TEST	DEBUG
+process.end
+
+Thu 2015.04.02 06:26:28.070 +0100	PROCESS_TEST	INFO
+Reply received
+  service	echo
+  message	echo
+    request.testMessage	### echo body ###
+    reply.testMessage	### echo body ###
+  close	true
+
+Thu 2015.04.02 06:26:33.139 +0100	PROCESS_TEST	INFO
+echo completed OKAY
+
+Thu 2015.04.02 06:26:33.139 +0100	PROCESS_TEST	INFO
+Test:passThrough
+
+Thu 2015.04.02 06:26:33.139 +0100	PROCESS_TEST	INFO
+Config
+    process.class	PassThrough
+      process.config.allowAnonymous	false
+        process.config.serviceList.echo	echo
+      logging.*.*	true
+    message.service	echo
+    message.message	echo
+      message.request.testMessage	### pass through ###
+      replies.1.service	echo
+      replies.1.message	echo
+      replies.1.request.testMessage	###	pass through ###
+      replies.1.reply.testMessage	###	pass through ###
+      replies.1.close	true
+    result.testMessage	### pass through ###
+
+Thu 2015.04.02 06:26:33.147 +0100	PassThrough@ProcessFactory	START
+Start logging
+
+Thu 2015.04.02 06:26:33.159 +0100	PROCESS_TEST	DEBUG
+process.start
+
+Thu 2015.04.02 06:26:39.824 +0100	PROCESS_TEST	DEBUG
+Forward requests
+  sourceRef	2
+      messageList.1.service	echo
+      messageList.1.message	echo
+        messageList.1.source.sourceRef	1
+          messageList.1.source.source.service	echo
+          messageList.1.source.source.message	echo
+        messageList.1.request.testMessage	### pass through ###
+
+Thu 2015.04.02 06:28:00.746 +0100	PROCESS_TEST	ERROR
+Exception during test
+Exception:
+java.lang.NullPointerException
+	at lexa.core.process.PassThrough.handleReply(PassThrough.java:224)
+	at lxprocess.ProcessTest.test(ProcessTest.java:200)
+	at lxprocess.ProcessTest.testAll(ProcessTest.java:139)
+	at lxprocess.ProcessTest.testCase(ProcessTest.java:105)
+	at lxprocess.ProcessTest.main(ProcessTest.java:53)
+
+Thu 2015.04.02 06:28:00.754 +0100	PROCESS_TEST	INFO
+Full test run complete
+

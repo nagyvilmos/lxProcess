@@ -1,0 +1,35 @@
+Tue 2015.03.31 20:16:38.845 +0100	LogWriter	START
+Logging started
+
+Tue 2015.03.31 20:16:38.845 +0100	PROCESS_TEST	START
+Start logging
+
+Tue 2015.03.31 20:16:38.845 +0100	PROCESS_TEST	INFO
+Test config
+  logFile	.\\log\\test.process.log
+        processes.echo.process.class	Echo
+          processes.echo.logging.*.*	true
+          processes.echo.logging.*.DEBUG	false
+        processes.echo.message.testMessage	### echo body ###
+        processes.echo.result.testMessage	### echo body ###
+
+Tue 2015.03.31 20:16:38.857 +0100	PROCESS_TEST	INFO
+Run all tests
+
+Tue 2015.03.31 20:16:43.977 +0100	PROCESS_TEST	INFO
+Test:echo
+
+Tue 2015.03.31 20:16:43.977 +0100	PROCESS_TEST	INFO
+Config
+    process.class	Echo
+      logging.*.*	true
+      logging.*.DEBUG	false
+    message.testMessage	### echo body ###
+    result.testMessage	### echo body ###
+
+Tue 2015.03.31 20:16:44.069 +0100	Echo@ProcessFactory	START
+Start logging
+
+Tue 2015.03.31 20:16:44.285 +0100	PROCESS_TEST	DEBUG
+process.start
+

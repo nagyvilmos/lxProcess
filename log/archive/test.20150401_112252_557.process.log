@@ -1,0 +1,94 @@
+Wed 2015.04.01 11:22:37.031 +0100	LogWriter	START
+Logging started
+
+Wed 2015.04.01 11:22:37.035 +0100	PROCESS_TEST	START
+Start logging
+
+Wed 2015.04.01 11:22:37.035 +0100	PROCESS_TEST	INFO
+Test config
+  logFile	.\\log\\test.process.log
+        processes.echo.process.class	Echo
+          processes.echo.logging.*.*	true
+        processes.echo.message.service	echo
+        processes.echo.message.message	echo
+          processes.echo.message.request.testMessage	### echo body ###
+        processes.echo.result.testMessage	### echo body ###
+        processes.passThrough.pass.class	PassThrough
+          processes.passThrough.pass.config.allowAnonymous	false
+            processes.passThrough.pass.config.serviceList.echo	echo
+          processes.passThrough.logging.*.*	true
+        processes.passThrough.message.service	echo
+        processes.passThrough.message.message	echo
+          processes.passThrough.message.request.testMessage	### pass through ###
+        processes.passThrough.result.testMessage	### pass through ###
+
+Wed 2015.04.01 11:22:37.051 +0100	PROCESS_TEST	INFO
+Run all tests
+
+Wed 2015.04.01 11:22:37.051 +0100	PROCESS_TEST	INFO
+Test:echo
+
+Wed 2015.04.01 11:22:37.055 +0100	PROCESS_TEST	INFO
+Config
+    process.class	Echo
+      logging.*.*	true
+    message.service	echo
+    message.message	echo
+      message.request.testMessage	### echo body ###
+    result.testMessage	### echo body ###
+
+Wed 2015.04.01 11:22:37.167 +0100	Echo@ProcessFactory	START
+Start logging
+
+Wed 2015.04.01 11:22:50.241 +0100	PROCESS_TEST	DEBUG
+process.start
+
+Wed 2015.04.01 11:22:52.513 +0100	PROCESS_TEST	DEBUG
+process.end
+
+Wed 2015.04.01 11:22:52.517 +0100	PROCESS_TEST	INFO
+Reply received
+    request.service	echo
+    request.message	echo
+      request.request.testMessage	### echo body ###
+    reply.service	echo
+    reply.message	echo
+      reply.request.testMessage	### echo body ###
+  close	true
+
+Wed 2015.04.01 11:22:52.521 +0100	PROCESS_TEST	ERROR
+Exception during test
+Exception:
+java.lang.Exception: Reply does not match expected result
+	at lxprocess.ProcessTest.test(ProcessTest.java:168)
+	at lxprocess.ProcessTest.testAll(ProcessTest.java:100)
+	at lxprocess.ProcessTest.main(ProcessTest.java:66)
+
+Wed 2015.04.01 11:22:52.525 +0100	PROCESS_TEST	INFO
+Test:passThrough
+
+Wed 2015.04.01 11:22:52.525 +0100	PROCESS_TEST	INFO
+Config
+    pass.class	PassThrough
+      pass.config.allowAnonymous	false
+        pass.config.serviceList.echo	echo
+      logging.*.*	true
+    message.service	echo
+    message.message	echo
+      message.request.testMessage	### pass through ###
+    result.testMessage	### pass through ###
+
+Wed 2015.04.01 11:22:52.533 +0100	PROCESS_TEST	ERROR
+Exception during test
+Exception:
+No data in configuration] [path:=root]
+	at lexa.core.data.ConfigData.<init>(ConfigData.java:113)
+	at lexa.core.data.ConfigData.<init>(ConfigData.java:79)
+	at lexa.core.data.ConfigData.<init>(ConfigData.java:64)
+	at lxprocess.ProcessTest.test(ProcessTest.java:119)
+	at lxprocess.ProcessTest.testAll(ProcessTest.java:100)
+	at lxprocess.ProcessTest.main(ProcessTest.java:66)
+
+Wed 2015.04.01 11:22:52.533 +0100	PROCESS_TEST	INFO
+Full test run complete
+

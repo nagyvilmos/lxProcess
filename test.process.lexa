@@ -1,0 +1,85 @@
+# config for testing through the lxServer
+# logFile - <name of log file; optional>
+# test - list of tests to run, otherwise all tests are run.
+# functions {
+#   <global function defs for lxExression; optional>
+# }
+# processes {
+#   <test name> {
+#     functions {
+#       <function defs for this test; block is optional>
+#     }
+#     process {
+#       <process config for this test>
+#     }
+#     message {
+#       <message to send for this test>
+#     }
+#     result {
+#       <expected results> 
+#     }
+#   }
+# }
+logFile .\\log\\test.process.log
+# test passThrough
+processes {
+    echo {
+        process {
+			# loader - lexa.core.server.factory.InternalLoader
+			class - Echo
+		}
+		logging {
+			* {
+				* ? true
+#				DEBUG ? false
+			}
+		}
+        message {
+            service - echo
+            message - echo
+            request {
+                testMessage - ### echo body ###
+            }
+		}
+        result {
+			testMessage - ### echo body ###
+		}
+    }
+    passThrough {
+		process {
+			# loader - lexa.core.server.factory.InternalLoader
+			class - PassThrough
+			config {
+				allowAnonymous ? false
+				serviceList {
+					echo - echo
+				}
+			}
+		}
+		logging {
+			* {
+				* ? true
+#				DEBUG ? false
+			}
+		}
+        message {
+            service - echo
+            message - echo
+            request {
+                testMessage - ### pass through ###
+            }
+		}
+        replies {
+			1 {
+				service	echo
+				message	echo
+				  request.testMessage	### pass through ###
+				  reply.testMessage	### pass through ###
+				close	true
+			}
+        }
+        result {
+			testMessage - ### pass through ###
+		}
+	}
+}
