@@ -11,6 +11,7 @@
  * Date:        By: Ref:        Description:
  * ----------   --- ----------  --------------------------------------------------
  * 2015-03-11	WNW	2015-03		Updated in line with new lxData
+ * 2016-08-30	WNW	2016-08		Replace clone of DataSet with copy constructors
  *================================================================================
  */
 package lexa.core.process;
@@ -181,7 +182,7 @@ public class ConfigProcess
 	@Override
 	public DataSet getMessageData()
 	{
-		DataSet msg = this.request.clone()
+		DataSet msg = new SimpleDataSet(this.request)
 				.put (Config.NEXT_REQUEST, this.nextRequest)
 				.put (Config.DATA,this.data)
 				.put(Context.REPLY, this.replyData);

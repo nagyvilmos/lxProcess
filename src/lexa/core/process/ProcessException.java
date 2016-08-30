@@ -10,7 +10,7 @@
  * Change Log
  * Date:        By: Ref:        Description:
  * ----------   --- ----------  --------------------------------------------------
- * -            -   -           -
+ * 2016-08-30	WNW	2016-08		Replace clone of DataSet with copy constructors
  *================================================================================
  */
 package lexa.core.process;
@@ -102,7 +102,7 @@ public class ProcessException
     public ProcessException(String message, DataSet context, Throwable cause) {
         super(message, cause);
             this.context = context == null ? null :
-                    new SealedDataSet(context.clone());
+                    new SealedDataSet(context);
         new Logger("ProcessException", null).error(message, context, cause);
     }
 

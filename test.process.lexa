@@ -1,4 +1,4 @@
-# config for testing through the lxServer
+# config for testing an lxProcess
 # logFile - <name of log file; optional>
 # test - list of tests to run, otherwise all tests are run.
 # functions {
@@ -20,8 +20,9 @@
 #     }
 #   }
 # }
+
 logFile .\\log\\test.process.log
-# test passThrough
+# test echo
 processes {
     echo {
         process {
@@ -45,41 +46,41 @@ processes {
 			testMessage - ### echo body ###
 		}
     }
-    passThrough {
-		process {
-			# loader - lexa.core.server.factory.InternalLoader
-			class - PassThrough
-			config {
-				allowAnonymous ? false
-				serviceList {
-					echo - echo
-				}
-			}
-		}
-		logging {
-			* {
-				* ? true
+#    passThrough {
+#		process {
+#			# loader - lexa.core.server.factory.InternalLoader
+#			class - PassThrough
+#			config {
+#				allowAnonymous ? false
+#				serviceList {
+#					echo - echo
+#				}
+#			}
+#		}
+#		logging {
+#			* {
+#				* ? true
 #				DEBUG ? false
-			}
-		}
-        message {
-            service - echo
-            message - echo
-            request {
-                testMessage - ### pass through ###
-            }
-		}
-        replies {
-			1 {
-				service	echo
-				message	echo
-				  request.testMessage	### pass through ###
-				  reply.testMessage	### pass through ###
-				close	true
-			}
-        }
-        result {
-			testMessage - ### pass through ###
-		}
-	}
+#			}
+#		}
+#        message {
+#            service - echo
+#            message - echo
+#            request {
+#                testMessage - ### pass through ###
+#            }
+#		}
+#        replies {
+#			1 {
+#				service	echo
+#				message	echo
+#				  request.testMessage	### pass through ###
+#				  reply.testMessage	### pass through ###
+#				close	true
+#			}
+#        }
+#        result {
+#			testMessage - ### pass through ###
+#		}
+#	}
 }

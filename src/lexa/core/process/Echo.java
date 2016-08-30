@@ -12,12 +12,14 @@
  * ----------   --- ----------  --------------------------------------------------
  * 2013-08-10   WNW -           Changed to use RequestProcess
  * 2015-03-11	WNW	2015-03		Updated in line with new lxData
+ * 2016-08-30	WNW	2016-08		Replace clone of DataSet with copy constructors
  *================================================================================
  */
 package lexa.core.process;
 
 import lexa.core.data.ConfigData;
 import lexa.core.data.DataSet;
+import lexa.core.data.SimpleDataSet;
 import lexa.core.data.exception.DataException;
 import lexa.core.expression.ExpressionException;
 import lexa.core.expression.function.FunctionLibrary;
@@ -47,7 +49,7 @@ public class Echo
 
     @Override
     public DataSet buildReply() throws ProcessException {
-        DataSet replyContext = this.context.clone()
+        DataSet replyContext = new SimpleDataSet(this.context)
 				.put(Context.REPLY,this.reply);
         return replyContext;
     }
@@ -92,7 +94,9 @@ public class Echo
 
     @Override
     public void onProcess() throws ProcessException {
-        this.reply = this.context.getDataSet(Context.REQUEST).clone();
+        this.reply = new SimpleDataSet(
+                this.context.getDataSet(Context.REQUEST)
+        );
     }
 
 	/**
@@ -110,7 +114,7 @@ public class Echo
 	@Override
 	public DataSet getMessageData()
 	{
-		return this.context.clone()
+		return new SimpleDataSet(this.context)
 				.put(Context.REPLY, this.reply);
 	}
 }

@@ -10,7 +10,8 @@
  * Change Log
  * Date:        By: Ref:        Description:
  * ----------   --- ----------  --------------------------------------------------
- * -
+ * 2016-08-30   WNW -           Replace clone of DataSet with create copy.
+ *                              Write exception on start up to System.err
  *================================================================================
  */
 
@@ -92,10 +93,8 @@ public class ProcessTest {
         DataSet file = null;
         try {
             file = new DataReader(new File(fileName)).read();
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
         if (file == null) {
             System.err.println("File not found, exiting.");
@@ -174,7 +173,9 @@ public class ProcessTest {
 			config.close();
 			LexaProcess process = factory.instance();
 			Status status = process.getStatus();
-			process.handleRequest(testCase.getDataSet(Context.MESSAGE).clone());
+			process.handleRequest(
+                    new SimpleDataSet(testCase.getDataSet(Context.MESSAGE))
+            );
 			DataSet forward = null;
 			DataSet reply = null;
 			boolean busy = true;

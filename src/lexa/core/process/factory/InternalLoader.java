@@ -1,6 +1,19 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * =============================================================================
+ * Lexa - Property of William Norman-Walker
+ * -----------------------------------------------------------------------------
+ * ProcessLoaderInterface.java
+ *------------------------------------------------------------------------------
+ * Author:  William Norman-Walker
+ * Created: April 2015
+ *------------------------------------------------------------------------------
+ * Change Log
+ * Date:        By: Ref:        Description:
+ * ----------   --- ----------  ------------------------------------------------
+ * 2016-08-30   WNW 2016-08     Throw an exception when initialised with an
+ *                              unknown class
+ * 2016-08-30   WNW 2016-08     Update the JavaDoc
+ *==============================================================================
  */
 package lexa.core.process.factory;
 
@@ -42,6 +55,7 @@ public class InternalLoader
 				break;
 			}
 		}
+        throw new DataException("Unknown path " + classPath);
 	}
 
 	@Override
