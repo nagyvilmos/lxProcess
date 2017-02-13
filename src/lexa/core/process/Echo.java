@@ -17,7 +17,7 @@
  */
 package lexa.core.process;
 
-import lexa.core.data.ConfigData;
+import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.DataSet;
 import lexa.core.data.SimpleDataSet;
 import lexa.core.data.exception.DataException;
@@ -75,7 +75,7 @@ public class Echo
     }
 
     @Override
-    public void onInitialise(FunctionLibrary funtionLibrary, ConfigData config)
+    public void onInitialise(FunctionLibrary funtionLibrary, ConfigDataSet config)
             throws ProcessException,
                     DataException,
                     ExpressionException {

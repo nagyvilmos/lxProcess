@@ -15,7 +15,7 @@
  */
 package lexa.core.process;
 
-import lexa.core.data.ConfigData;
+import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.DataItem;
 import lexa.core.data.DataSet;
 import lexa.core.data.SimpleDataSet;
@@ -61,20 +61,20 @@ public class PassThrough
     }
 
     @Override
-    public void initialise(FunctionLibrary funtionLibrary, ConfigData config) throws ProcessException, DataException {
+    public void initialise(FunctionLibrary funtionLibrary, ConfigDataSet config) throws ProcessException, DataException {
         if (this.status.active() || this.status.closed()) {
             throw new ProcessException("Process cannot be initialised in current state.");
         }
-        this.allowAnonymous = config.getItem(Config.ALLOW_ANONYMOUS).getBoolean();
+        this.allowAnonymous = config.getBoolean(Config.ALLOW_ANONYMOUS);
         this.messageMap = new SimpleDataSet();
         this.requests = new SimpleDataSet();
-        ConfigData serviceConfig = config.getConfigData(Config.SERVICE_LIST);
+        ConfigDataSet serviceConfig = config.getDataSet(Config.SERVICE_LIST);
         String[] keys = serviceConfig.keys();
         for (int k = 0;
                 k < keys.length;
                 k++) {
             String from = keys[k];
-            String to = serviceConfig.getSetting(from);
+            String to = serviceConfig.getString(from);
             this.messageMap.put(from,to);
         }
         serviceConfig.close();

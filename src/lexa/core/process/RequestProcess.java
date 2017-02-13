@@ -15,7 +15,7 @@
  */
 package lexa.core.process;
 
-import lexa.core.data.ConfigData;
+import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.DataSet;
 import lexa.core.data.SimpleDataSet;
 import lexa.core.data.exception.DataException;
@@ -223,7 +223,7 @@ public abstract class RequestProcess
     public abstract boolean hasFurtherWork() throws ProcessException;
 
     @Override
-    public void initialise(FunctionLibrary functionLibrary, ConfigData config)
+    public void initialise(FunctionLibrary functionLibrary, ConfigDataSet config)
             throws ProcessException,
                     DataException,
                     ExpressionException {
@@ -256,7 +256,7 @@ public abstract class RequestProcess
      * @throws  DataException
      *          when an exception occurs in the configuration.
      */
-    public abstract void onInitialise(FunctionLibrary functionLibrary, ConfigData config)
+    public abstract void onInitialise(FunctionLibrary functionLibrary, ConfigDataSet config)
             throws ProcessException,
                     DataException,
                     ExpressionException;

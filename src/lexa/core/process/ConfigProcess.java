@@ -19,6 +19,7 @@ package lexa.core.process;
 import java.util.HashMap;
 import java.util.Map;
 import lexa.core.data.*;
+import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.exception.DataException;
 import lexa.core.expression.Expression;
 import lexa.core.expression.ExpressionException;
@@ -108,17 +109,17 @@ public class ConfigProcess
     }
 
     @Override
-    public void onInitialise(FunctionLibrary functionLibrary, ConfigData config)
+    public void onInitialise(FunctionLibrary functionLibrary, ConfigDataSet config)
             throws ProcessException,
                     DataException,
                     ExpressionException {
         this.handleRequest = Expression.parse(
-				config.getOptionalSetting(Config.HANDLE_REQUEST, "true"),functionLibrary);
+				config.get(Config.HANDLE_REQUEST, "true").getString(),functionLibrary);
         this.requests = new HashMap<String, Expression>();
         if (config.contains(Config.REQUEST_LIST)) {
             this.checkNextRequest = Expression.parse(
-					config.getSetting(Config.NEXT_REQUEST), functionLibrary);
-            ConfigData requestConfig = config.getConfigData(Config.REQUEST_LIST);
+					config.getString(Config.NEXT_REQUEST), functionLibrary);
+            ConfigDataSet requestConfig = config.getDataSet(Config.REQUEST_LIST);
 //            for (DataItem item : requestConfig.getAll()) {
 //                this.requests.put(item.getKey(), parser.getExpression(item.getString()));
 //            }
@@ -126,7 +127,7 @@ public class ConfigProcess
 //        this.buildReply = parser.getExpression(
 //                config.getSetting(Config.BUILD_REPLY));
         if (config.contains(Config.DATA)) {
-            this.data = config.getConfigData(Config.DATA).getAll();
+            this.data = new SimpleDataSet(config.getDataSet(Config.DATA));
         }
     }
 

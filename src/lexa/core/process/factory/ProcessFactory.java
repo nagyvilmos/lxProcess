@@ -20,8 +20,9 @@
  */
 package lexa.core.process.factory;
 
-import lexa.core.data.ConfigData;
+import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.DataSet;
+import lexa.core.data.SimpleDataSet;
 import lexa.core.data.exception.DataException;
 import lexa.core.expression.ExpressionException;
 import lexa.core.expression.function.FunctionLibrary;
@@ -72,7 +73,7 @@ public class ProcessFactory
     public ProcessFactory(ClassLoader classLoader,
 			String loaderPath,
 			String classPath, 
-			ConfigData config, 
+			ConfigDataSet config, 
 			FunctionLibrary functionLibrary)
 				throws DataException
 	{
@@ -80,7 +81,7 @@ public class ProcessFactory
         this.classPath = classPath;
         this.processConfig = config == null ?
                 null :
-                config.getAll();
+                new SimpleDataSet(config);
         this.functionLibrary = functionLibrary;
 		try
 		{
@@ -122,7 +123,7 @@ public class ProcessFactory
             process.initialise(null,null);
         } else {
             process.initialise(this.functionLibrary,
-                    new ConfigData(this.processConfig));
+                    new ConfigDataSet(this.processConfig));
         }
         process.setId(ProcessFactory.getNextProcessId());
         return process;

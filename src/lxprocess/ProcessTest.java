@@ -20,7 +20,7 @@ package lxprocess;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import lexa.core.data.ConfigData;
+import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.DataItem;
 import lexa.core.data.DataSet;
 import lexa.core.data.SimpleDataSet;
@@ -154,18 +154,18 @@ public class ProcessTest {
 
         try {
 			FunctionLibrary functionLibrary = new FunctionLibrary(functions);
-            ConfigData config = new ConfigData(testCase.getDataSet("process"));
+            ConfigDataSet config = new ConfigDataSet(testCase.getDataSet("process"));
 			// if needed we can always get a URLClassLoader to allow 
 			// the explicit listing of jars to load.
 			ClassLoader loader = ClassLoader.getSystemClassLoader();
 
-			ConfigData processConfig = config.contains(Config.CONFIG) ?
-						config.getConfigData(Config.CONFIG) : null;
+			ConfigDataSet processConfig = config.contains(Config.CONFIG) ?
+						config.getDataSet(Config.CONFIG) : null;
 			ProcessFactory factory = new ProcessFactory(
 					loader,
-					config.getOptionalSetting(Config.CLASS_LOADER,
-							InternalLoader.class.getCanonicalName()),
-					config.getSetting(Config.CLASS_PATH),
+					config.get(Config.CLASS_LOADER,
+							InternalLoader.class.getCanonicalName()).getString(),
+					config.getString(Config.CLASS_PATH),
 					processConfig, functionLibrary);
 			if (processConfig != null) {
 				processConfig.close();

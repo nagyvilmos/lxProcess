@@ -16,7 +16,7 @@
  */
 package lexa.core.process;
 
-import lexa.core.data.ConfigData;
+import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.DataSet;
 import lexa.core.data.exception.DataException;
 import lexa.core.expression.ExpressionException;
@@ -156,7 +156,7 @@ public interface LexaProcess {
      *          when an exception occurs in the configuration.
 	 * @throws lexa.core.expression.ExpressionException
      */
-    public void initialise(FunctionLibrary functionLibrary, ConfigData config)
+    public void initialise(FunctionLibrary functionLibrary, ConfigDataSet config)
             throws ProcessException,
                     DataException,
                     ExpressionException;
