@@ -212,4 +212,12 @@ public class Status {
     public boolean waitingReply() {
         return this.waitingReply;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Status{" + "active=" + active + ", closed=" + closed + ", acceptRequests=" + acceptRequests + ", replyReady=" + replyReady + ", requestPending=" + requestPending + ", waitingProcess=" + waitingProcess + ", waitingReply=" + waitingReply + '}';
+    }
+    
+    
 }

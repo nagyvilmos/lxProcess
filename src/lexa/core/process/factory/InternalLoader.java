@@ -54,8 +54,11 @@ public class InternalLoader
 				this.loader = () -> new PassThrough();
 				break;
 			}
+            default :
+            {
+                throw new DataException("Unknown path " + classPath);
+            }
 		}
-        throw new DataException("Unknown path " + classPath);
 	}
 
 	@Override

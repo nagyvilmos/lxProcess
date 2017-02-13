@@ -152,7 +152,6 @@ public class PassThrough
 						.put(PassThrough.STATE_WAITING_REPLY,true);
             }
         }
-        this.status.setRequestPending(false);
         if (messageList.isEmpty()) {
             return null;
         }
@@ -228,6 +227,7 @@ public class PassThrough
 			.put(PassThrough.STATE_WAITING_REPLY,false) // maybe not?
 			.put(PassThrough.STATE_REPLY_READY,true);
 
+        this.status.setWaitingReply(false);
         this.status.setWaitingProcess(true);
     }
 

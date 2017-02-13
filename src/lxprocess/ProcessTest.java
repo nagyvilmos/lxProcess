@@ -33,6 +33,8 @@ import lexa.core.process.context.Config;
 import lexa.core.process.context.Context;
 import lexa.core.process.factory.InternalLoader;
 import lexa.core.process.factory.ProcessFactory;
+import lexa.test.TestClass;
+import lexa.test.TestRun;
 
 /**
  * Test bed for lxServer.
@@ -51,7 +53,15 @@ public class ProcessTest {
         if (args != null && args.length > 0) {
             fileName = args[0];
         }
-		testCase(fileName);
+		//testCase(fileName);
+        TestClass[] tests = new TestClass[]{
+            new TestProcess(fileName)
+        };
+        System.out.println(
+                new TestRun(tests)
+                        .execute()
+                        .getReport()
+        );        
 	}
 	
 	/**

@@ -22,7 +22,7 @@
 # }
 
 logFile .\\log\\test.process.log
-# test echo
+# test config
 processes {
     echo {
         process {
@@ -46,41 +46,91 @@ processes {
 			testMessage - ### echo body ###
 		}
     }
-#    passThrough {
-#		process {
-#			# loader - lexa.core.server.factory.InternalLoader
-#			class - PassThrough
-#			config {
-#				allowAnonymous ? false
-#				serviceList {
-#					echo - echo
-#				}
-#			}
-#		}
-#		logging {
-#			* {
-#				* ? true
-#				DEBUG ? false
-#			}
-#		}
-#        message {
-#            service - echo
-#            message - echo
-#            request {
-#                testMessage - ### pass through ###
-#            }
-#		}
-#        replies {
-#			1 {
-#				service	echo
-#				message	echo
-#				  request.testMessage	### pass through ###
-#				  reply.testMessage	### pass through ###
-#				close	true
-#			}
-#        }
-#        result {
-#			testMessage - ### pass through ###
-#		}
-#	}
+    passThrough {
+		process {
+			# loader - lexa.core.server.factory.InternalLoader
+			class - PassThrough
+			config {
+				allowAnonymous ? false
+				serviceList {
+					pass - through
+				}
+			}
+		}
+		logging {
+			* {
+				* ? true
+				DEBUG ? false
+			}
+		}
+        message {
+            service - through
+            message - pass
+            request {
+                testMessage - ### pass through ###
+            }
+		}
+        replies {
+            1 {
+                service - through
+                message - pass
+                source {
+                    sourceRef % 1
+                }
+				request {
+                    testMessage	- ### pass through ###
+                }
+				reply {
+                    testMessage	- ### pass through ###
+                }
+				close ? true
+			}
+        }
+        result {
+			testMessage	- ### pass through ###
+		}
+	}
+    config {
+        # a config / exxpression based process
+		process {
+			# loader - lexa.core.server.factory.InternalLoader
+			class - Config
+            requestList {
+
+
+            }
+		}
+		logging {
+			* {
+				* ? true
+				DEBUG ? false
+			}
+		}
+       message {
+            service - echo
+            message - echo
+            request {
+                testMessage - ### pass through ###
+            }
+		}
+        replies {
+            1 {
+				service	echo
+				message	echo
+                source {
+                    sourceRef % 1
+                }
+				request {
+                    testMessage	### pass through ###
+                }
+				reply {
+                    testMessage	### pass through ###
+                }
+				close ? true
+			}
+        }
+        result {
+			testMessage - ### pass through ###
+		}
+	}
 }
