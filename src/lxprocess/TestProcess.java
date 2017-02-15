@@ -105,18 +105,8 @@ public class TestProcess
         // the explicit listing of jars to load.
         ClassLoader loader = ClassLoader.getSystemClassLoader();
 
-        ConfigDataSet processConfig = config.contains(Config.CONFIG)
-                ? config.getDataSet(Config.CONFIG) : null;
-        this.factory = new ProcessFactory(
-                loader,
-                config.get(Config.CLASS_LOADER,
-                        InternalLoader.class.getCanonicalName()).getString(),
-                config.getString(Config.CLASS_PATH),
-                processConfig, functionLibrary);
-        if (processConfig != null)
-        {
-            processConfig.close();
-        }
+        this.factory = new ProcessFactory(loader,config, functionLibrary);
+
         config.close();
         return true;
     }

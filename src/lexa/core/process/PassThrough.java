@@ -69,13 +69,9 @@ public class PassThrough
         this.messageMap = new SimpleDataSet();
         this.requests = new SimpleDataSet();
         ConfigDataSet serviceConfig = config.getDataSet(Config.SERVICE_LIST);
-        String[] keys = serviceConfig.keys();
-        for (int k = 0;
-                k < keys.length;
-                k++) {
-            String from = keys[k];
-            String to = serviceConfig.getString(from);
-            this.messageMap.put(from,to);
+        for (DataItem item : serviceConfig)
+        {
+            this.messageMap.put(item.getKey(),item.getString());
         }
         serviceConfig.close();
         this.status.setActive();

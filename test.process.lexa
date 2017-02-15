@@ -22,7 +22,8 @@
 # }
 
 logFile .\\log\\test.process.log
-# test config
+test echo passThrough
+# ignore config for now
 processes {
     echo {
         process {
@@ -92,11 +93,11 @@ processes {
 	}
     config {
         # a config / exxpression based process
+        # *** Incomplete, this does not work yet as no code behind ***
 		process {
 			# loader - lexa.core.server.factory.InternalLoader
 			class - Config
-            requestList {
-
+            config {
 
             }
 		}

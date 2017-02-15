@@ -12,7 +12,7 @@
  * ----------   --- ----------  --------------------------------------------------
  * 2013-09-04   WNW -           Moved the initialisation of the process in here
  *                              where it belongs.
- * 2014-07-10	WNW				Re-write the factory.  Use reflection to get a 
+ * 2014-07-10	WNW				Re-write the factory.  Use reflection to get a
  *								class loader.
  * 2016-08-30   WNW 2016-08     Update javadoc
  * 2016-08-30   WNW 2016-08     Remove dead code
@@ -29,6 +29,7 @@ import lexa.core.expression.function.FunctionLibrary;
 import lexa.core.logging.Logger;
 import lexa.core.process.ProcessException;
 import lexa.core.process.LexaProcess;
+import lexa.core.process.context.Config;
 
 /**
  * A factory for creating and initialising processes.
@@ -39,7 +40,7 @@ import lexa.core.process.LexaProcess;
 public class ProcessFactory
 {
 	private final Logger logger;
-	
+
     private static int lastProcessId = 0;
     private static int getNextProcessId()
     {
@@ -59,30 +60,26 @@ public class ProcessFactory
      *
 	 * @param classLoader
      *          the loader for the class
-	 * @param loaderPath
-     *          the path to be used by the class loader
-     * @param   classPath
-     *          the path for the process to be loaded
      * @param   config
-     *          the configuration required by the process
+     *          the configuration required by the process factory
 	 * @param functionLibrary
      *          Expression functions for the process to use
      * @throws  DataException
      *          when an exception occurs reading the configuration.
      */
     public ProcessFactory(ClassLoader classLoader,
-			String loaderPath,
-			String classPath, 
-			ConfigDataSet config, 
+            ConfigDataSet config,
 			FunctionLibrary functionLibrary)
 				throws DataException
 	{
-        this.logger = new Logger(ProcessFactory.class.getSimpleName(), classPath);
-        this.classPath = classPath;
-        this.processConfig = config == null ?
-                null :
-                new SimpleDataSet(config);
+        this.logger = new Logger(ProcessFactory.class.getSimpleName(),
+                config.getString(Config.CLASS_PATH));
+        this.classPath = config.getString(Config.CLASS_PATH);
+        this.processConfig = new SimpleDataSet(
+                config.get(Config.CONFIG, null).getDataSet());
         this.functionLibrary = functionLibrary;
+        String loaderPath=config.get(Config.CLASS_LOADER,
+                    InternalLoader.class.getCanonicalName()).getString();
 		try
 		{
 			Class c = classLoader.loadClass(loaderPath);
@@ -91,7 +88,7 @@ public class ProcessFactory
 		catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex)
 		{
 			String msg = "Unable to instantiate the class loader @ " +  loaderPath;
-			this.logger.error(msg,processConfig, ex);
+			this.logger.error(msg,processConfig, ex, config);
 			throw new DataException(classPath);
 		}
 		this.loader.initialise(classPath);
@@ -119,12 +116,9 @@ public class ProcessFactory
                     ExpressionException
     {
         LexaProcess process = this.loader.getInstance();
-        if (this.processConfig == null) {
-            process.initialise(null,null);
-        } else {
-            process.initialise(this.functionLibrary,
-                    new ConfigDataSet(this.processConfig));
-        }
+        ConfigDataSet config = new ConfigDataSet(this.processConfig);
+        process.initialise(this.functionLibrary,config);
+        config.close();
         process.setId(ProcessFactory.getNextProcessId());
         return process;
     }
