@@ -22,7 +22,7 @@ package lexa.core.process.factory;
 
 import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.DataSet;
-import lexa.core.data.SimpleDataSet;
+import lexa.core.data.ArrayDataSet;
 import lexa.core.data.exception.DataException;
 import lexa.core.expression.ExpressionException;
 import lexa.core.expression.function.FunctionLibrary;
@@ -75,7 +75,7 @@ public class ProcessFactory
         this.logger = new Logger(ProcessFactory.class.getSimpleName(),
                 config.getString(Config.CLASS_PATH));
         this.classPath = config.getString(Config.CLASS_PATH);
-        this.processConfig = new SimpleDataSet(
+        this.processConfig = new ArrayDataSet(
                 config.get(Config.CONFIG, null).getDataSet());
         this.functionLibrary = functionLibrary;
         String loaderPath=config.get(Config.CLASS_LOADER,

@@ -17,7 +17,7 @@ package lexa.core.process;
 
 import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.DataSet;
-import lexa.core.data.SimpleDataSet;
+import lexa.core.data.ArrayDataSet;
 import lexa.core.data.exception.DataException;
 import lexa.core.expression.ExpressionException;
 import lexa.core.expression.function.FunctionLibrary;
@@ -317,7 +317,7 @@ public abstract class RequestProcess
 	@Override
 	public DataSet getMessageData()
 	{
-		DataSet msg = new SimpleDataSet(this.request)
+		DataSet msg = new ArrayDataSet(this.request)
 				.put(Context.REPLY, this.reply);
 		
 		return msg;

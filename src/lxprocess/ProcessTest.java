@@ -23,7 +23,7 @@ import java.io.IOException;
 import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.DataItem;
 import lexa.core.data.DataSet;
-import lexa.core.data.SimpleDataSet;
+import lexa.core.data.ArrayDataSet;
 import lexa.core.data.io.DataReader;
 import lexa.core.expression.function.FunctionLibrary;
 import lexa.core.logging.Logger;
@@ -185,7 +185,7 @@ public class ProcessTest {
 //			LexaProcess process = factory.instance();
 //			Status status = process.getStatus();
 //			process.handleRequest(
-//                    new SimpleDataSet(testCase.getDataSet(Context.MESSAGE))
+//                    new ArrayDataSet(testCase.getDataSet(Context.MESSAGE))
 //            );
 //			DataSet forward = null;
 //			DataSet reply = null;

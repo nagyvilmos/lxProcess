@@ -127,7 +127,7 @@ public class ConfigProcess
 //        this.buildReply = parser.getExpression(
 //                config.getSetting(Config.BUILD_REPLY));
         if (config.contains(Config.DATA)) {
-            this.data = new SimpleDataSet(config.getDataSet(Config.DATA));
+            this.data = new ArrayDataSet(config.getDataSet(Config.DATA));
         }
     }
 
@@ -136,7 +136,7 @@ public class ConfigProcess
 			throws ProcessException {
         this.request = new SealedDataSet(request);
 		this.nextRequest = null;
-		this.replyData = new SimpleDataSet();
+		this.replyData = new ArrayDataSet();
         try {
 			DataSet msg = this.getMessageData();
 			Object result = this.handleRequest.evaluate(msg);
@@ -183,7 +183,7 @@ public class ConfigProcess
 	@Override
 	public DataSet getMessageData()
 	{
-		DataSet msg = new SimpleDataSet(this.request)
+		DataSet msg = new ArrayDataSet(this.request)
 				.put (Config.NEXT_REQUEST, this.nextRequest)
 				.put (Config.DATA,this.data)
 				.put(Context.REPLY, this.replyData);

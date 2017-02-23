@@ -18,7 +18,7 @@ package lexa.core.process;
 import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.DataItem;
 import lexa.core.data.DataSet;
-import lexa.core.data.SimpleDataSet;
+import lexa.core.data.ArrayDataSet;
 import lexa.core.data.exception.DataException;
 import lexa.core.expression.function.FunctionLibrary;
 import lexa.core.process.context.Config;
@@ -66,8 +66,8 @@ public class PassThrough
             throw new ProcessException("Process cannot be initialised in current state.");
         }
         this.allowAnonymous = config.getBoolean(Config.ALLOW_ANONYMOUS);
-        this.messageMap = new SimpleDataSet();
-        this.requests = new SimpleDataSet();
+        this.messageMap = new ArrayDataSet();
+        this.requests = new ArrayDataSet();
         ConfigDataSet serviceConfig = config.getDataSet(Config.SERVICE_LIST);
         for (DataItem item : serviceConfig)
         {
@@ -88,7 +88,7 @@ public class PassThrough
             DataSet request = item.getDataSet();
             if (request.getBoolean(STATE_REPLY_READY)) {
                 // set the reply:
-                reply = new SimpleDataSet(request.getDataSet(Context.REQUEST))
+                reply = new ArrayDataSet(request.getDataSet(Context.REQUEST))
 						.put(request.get(Context.REPLY))
 						.put(request.get(Context.RETURN))
 						.put(request.get(Context.CLOSE));
@@ -106,34 +106,34 @@ public class PassThrough
         if (!this.status.requestPending()) {
             throw new ProcessException("No requests pending");
         }
-        DataSet messageList = new SimpleDataSet();
+        DataSet messageList = new ArrayDataSet();
         for (DataItem item : this.requests) {
             DataSet request = item.getDataSet();
             if (request.getBoolean(PassThrough.STATE_REQUEST_PENDING)) {
-//                DataSet data = new SimpleDataSet();
+//                DataSet data = new ArrayDataSet();
 //                data.put(request.get(Context.SERVICE));
 //                DataSet original = request.getDataSet(Context.REQUEST);
 //                data.put(original.get(Context.MESSAGE));
 //
-//                DataSet clientSource = new SimpleDataSet();
+//                DataSet clientSource = new ArrayDataSet();
 //                clientSource.put(original.get(Context.SERVICE));
 //                clientSource.put(original.get(Context.MESSAGE));
 //                clientSource.put(original.get(Context.SOURCE_ID));
 //                clientSource.put(original.get(Context.SOURCE_REF));
 //                clientSource.put(original.get(Context.SOURCE));
-//                DataSet source = new SimpleDataSet();
+//                DataSet source = new ArrayDataSet();
 //                source.put(request.get(Context.SOURCE_REF));
 //                source.put(Context.SOURCE,clientSource);
 //                data.put(Context.SOURCE,source);
 //                data.put(original.get(Context.REQUEST));
 
 				DataSet original = request.getDataSet(Context.REQUEST);
-				DataSet data = new SimpleDataSet()
+				DataSet data = new ArrayDataSet()
 					.put(request.get(Context.SERVICE))
 					.put(original.get(Context.MESSAGE))
-					.put(Context.SOURCE, new SimpleDataSet()
+					.put(Context.SOURCE, new ArrayDataSet()
 						.put(request.get(Context.SOURCE_REF))
-						.put(Context.SOURCE,new SimpleDataSet()
+						.put(Context.SOURCE,new ArrayDataSet()
 							.put(original.get(Context.SERVICE))
 							.put(original.get(Context.MESSAGE))
 							.put(original.get(Context.SOURCE_ID))
@@ -151,7 +151,7 @@ public class PassThrough
         if (messageList.isEmpty()) {
             return null;
         }
-        DataSet messages = new SimpleDataSet()
+        DataSet messages = new ArrayDataSet()
 				.put(Context.SOURCE_REF, this.getId())
 				.put(Context.MESSAGE_LIST,messageList);
         this.status.setRequestPending(false);
@@ -198,7 +198,7 @@ public class PassThrough
             //this.messageMap.put(from,to);
         }
         int sid = ++this.lastSid;
-        DataSet data = new SimpleDataSet()
+        DataSet data = new ArrayDataSet()
 				.put(Context.REQUEST, request)
 				.put(Context.SOURCE_REF, sid)
 				.put(Context.SERVICE,to)

@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import lexa.core.data.DataItem;
 import lexa.core.data.DataSet;
-import lexa.core.data.SimpleDataSet;
+import lexa.core.data.ArrayDataSet;
 import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.exception.DataException;
 import lexa.core.data.io.DataReader;
@@ -123,7 +123,7 @@ public class TestProcess
     public Boolean submitRequest(Object arg) throws ProcessException
     {
         process.handleRequest(
-                new SimpleDataSet(testCase.getDataSet(Context.MESSAGE))
+                new ArrayDataSet(testCase.getDataSet(Context.MESSAGE))
         );
         return true;
     }

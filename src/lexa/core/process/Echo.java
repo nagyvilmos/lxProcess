@@ -19,7 +19,7 @@ package lexa.core.process;
 
 import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.DataSet;
-import lexa.core.data.SimpleDataSet;
+import lexa.core.data.ArrayDataSet;
 import lexa.core.data.exception.DataException;
 import lexa.core.expression.ExpressionException;
 import lexa.core.expression.function.FunctionLibrary;
@@ -49,7 +49,7 @@ public class Echo
 
     @Override
     public DataSet buildReply() throws ProcessException {
-        DataSet replyContext = new SimpleDataSet(this.context)
+        DataSet replyContext = new ArrayDataSet(this.context)
 				.put(Context.REPLY,this.reply);
         return replyContext;
     }
@@ -94,7 +94,7 @@ public class Echo
 
     @Override
     public void onProcess() throws ProcessException {
-        this.reply = new SimpleDataSet(
+        this.reply = new ArrayDataSet(
                 this.context.getDataSet(Context.REQUEST)
         );
     }
@@ -114,7 +114,7 @@ public class Echo
 	@Override
 	public DataSet getMessageData()
 	{
-		return new SimpleDataSet(this.context)
+		return new ArrayDataSet(this.context)
 				.put(Context.REPLY, this.reply);
 	}
 }
