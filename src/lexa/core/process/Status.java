@@ -1,17 +1,11 @@
-/*
- * ================================================================================
+/*==============================================================================
  * Lexa - Property of William Norman-Walker
- * --------------------------------------------------------------------------------
+ *------------------------------------------------------------------------------
  * Process.java
- *--------------------------------------------------------------------------------
+ *------------------------------------------------------------------------------
  * Author:  William Norman-Walker
  * Created: June 2013
- *--------------------------------------------------------------------------------
- * Change Log
- * Date:        By: Ref:        Description:
- * ----------   --- ----------  --------------------------------------------------
- * -            -   -           -
- *================================================================================
+ *==============================================================================
  */
 package lexa.core.process;
 
@@ -109,8 +103,8 @@ public class Status {
 
     /**
      * Check the state of all the flags.
-     * <p>If {@link closed() closed} is {@code true} then {@link active() active} is {@code false}.
-     * <p>If {@link active() active} is {@code false} then all other flags are {@code false}.
+     * <p>If {@link #closed() closed} is {@code true} then {@link #active() active} is {@code false}.
+     * <p>If {@link #active() active} is {@code false} then all other flags are {@code false}.
      */
     public void checkStates() {
         this._checkStates();
@@ -218,6 +212,6 @@ public class Status {
     {
         return "Status{" + "active=" + active + ", closed=" + closed + ", acceptRequests=" + acceptRequests + ", replyReady=" + replyReady + ", requestPending=" + requestPending + ", waitingProcess=" + waitingProcess + ", waitingReply=" + waitingReply + '}';
     }
-    
-    
+
+
 }

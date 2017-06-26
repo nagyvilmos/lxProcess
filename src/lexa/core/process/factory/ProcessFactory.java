@@ -1,22 +1,14 @@
-/*
- * ================================================================================
+/*==============================================================================
  * Lexa - Property of William Norman-Walker
- * --------------------------------------------------------------------------------
+ *------------------------------------------------------------------------------
  * ProcessFactory.java
- *--------------------------------------------------------------------------------
+ *------------------------------------------------------------------------------
  * Author:  William Norman-Walker
  * Created: April 2013
- *--------------------------------------------------------------------------------
+ *------------------------------------------------------------------------------
  * Change Log
  * Date:        By: Ref:        Description:
- * ----------   --- ----------  --------------------------------------------------
- * 2013-09-04   WNW -           Moved the initialisation of the process in here
- *                              where it belongs.
- * 2014-07-10	WNW				Re-write the factory.  Use reflection to get a
- *								class loader.
- * 2016-08-30   WNW 2016-08     Update javadoc
- * 2016-08-30   WNW 2016-08     Remove dead code
- *================================================================================
+ *==============================================================================
  */
 package lexa.core.process.factory;
 
@@ -98,7 +90,7 @@ public class ProcessFactory
 	 * Get a new initialised instance of the process.
      * <p>A new instance of the process is instantiated and
      * then given its configuration via a call to
-     * {@link LexaProcess#initialise(lexa.core.expression.function.FunctionLibrary, lexa.core.data.ConfigData)
+     * {@link LexaProcess#initialise(lexa.core.expression.function.FunctionLibrary, lexa.core.data.config.ConfigDataSet)
      * initialise(FunctionLibrary, ConfigData)}.
      *
      * @return  a new initialised instance of the process

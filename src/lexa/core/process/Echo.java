@@ -109,7 +109,8 @@ public class Echo
 	 * }
 	 * reply {
 	 * }
-	 * @return the message data
+	 * </pre>
+     * @return the message data
 	 */
 	@Override
 	public DataSet getMessageData()

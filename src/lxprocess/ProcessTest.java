@@ -14,14 +14,15 @@ import lexa.test.TestClass;
 import lexa.test.TestRun;
 
 /**
- * Test bed for lxServer.
- * <p>Uses a {@see DataSet} file to store test servers.  This should be used like this to run simple
- * tests on single components and not to test fully functional servers.
- * See the file {@code config.test} to see the full test structure.
+ * Test bed for lxProcess.
+ * <p>Uses a {@link lexa.core.data.DataSet} file to store test processes.
+ * This should be used like this to run simple tests on single components and
+ * not to test fully functional servers.
+ * See the file {@code test.process.lexa} to see the full test structure.
  *
  * @author William
  * @since 2013-08
- * @see lexa.core.server
+ * @see lexa.core.process
  */
 public class ProcessTest {
 

@@ -1,18 +1,11 @@
-/*
- * ================================================================================
+/*==============================================================================
  * Lexa - Property of William Norman-Walker
- * --------------------------------------------------------------------------------
+ *------------------------------------------------------------------------------
  * ConfigProcess.java
- *--------------------------------------------------------------------------------
+ *------------------------------------------------------------------------------
  * Author:  William Norman-Walker
  * Created: August 2013
- *--------------------------------------------------------------------------------
- * Change Log
- * Date:        By: Ref:        Description:
- * ----------   --- ----------  --------------------------------------------------
- * 2015-03-11	WNW	2015-03		Updated in line with new lxData
- * 2016-08-30	WNW	2016-08		Replace clone of DataSet with copy constructors
- *================================================================================
+ *==============================================================================
  */
 package lexa.core.process;
 
@@ -167,7 +160,7 @@ public class ConfigProcess
 	{
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
-	
+
 	/**
 	 * Provides the data for exposing to the handlers:
 	 * <pre>
@@ -178,7 +171,8 @@ public class ConfigProcess
 	 * }
 	 * reply {
 	 * }
-	 * @return 
+	 * </pre>
+	 * @return the message data
 	 */
 	@Override
 	public DataSet getMessageData()

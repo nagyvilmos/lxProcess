@@ -1,17 +1,11 @@
-/*
- * ================================================================================
+/*==============================================================================
  * Lexa - Property of William Norman-Walker
- * --------------------------------------------------------------------------------
- * RequestProcess.java
- *--------------------------------------------------------------------------------
+ *------------------------------------------------------------------------------
+ * .java
+ *------------------------------------------------------------------------------
  * Author:  William Norman-Walker
- * Created: August 2013
- *--------------------------------------------------------------------------------
- * Change Log
- * Date:        By: Ref:        Description:
- * ----------   --- ----------  --------------------------------------------------
- * 2015-03-11	WNW	2015-03		Updated in line with new lxData
- *================================================================================
+ * CreRequestProcessated: August 2013
+ *==============================================================================
  */
 package lexa.core.process;
 
@@ -56,7 +50,7 @@ public abstract class RequestProcess
 
     /**
      * Method to build a new reply.
-     * <p>This is called by {@link RequestProcess#getReply() getReply} and the results
+     * <p>This is called by {@link #getReply() getReply} and the results
      * from this method are returned by it.
      *
      * @return  The data for the reply.
@@ -67,12 +61,12 @@ public abstract class RequestProcess
 
     /**
      * Method to build outstanding requests.
-     * <p>This is called by {@link RequestProcess#getRequests() getRequests} and the results
+     * <p>This is called by {@link #getRequests() getRequests} and the results
      * from this method are returned by it.
      * <p>This is only called if the status has pending requests; the flag is reset after this is called.
      *
 	 * @param context the context for making requests; normally the message received.
-     * @return  The data for the requests; see {@link Process#getRequests()}.
+     * @return  The data for the requests; see {@link #getRequests()}.
      * @throws ProcessException
      *          when an exception occurs building the requests.
      */
@@ -178,7 +172,7 @@ public abstract class RequestProcess
 
 	/**
 	 * Handle a request made to the process.
-	 * 
+	 *
 	 * <p>
      * @param   request
      *          a request made to the process
@@ -202,8 +196,8 @@ public abstract class RequestProcess
 
     /**
      * Indicates if there are any requests needed to be built.
-     * <p>This is called after {@link RequestProcess#onNewRequest(lexa.core.data.DataSet) onNewRequest}
-     * and {@link RequestProcess#onProcess() onProcess} to determine if any more requests are now needed.
+     * <p>This is called after {@link #onNewRequest(lexa.core.data.DataSet) onNewRequest}
+     * and {@link #onProcess() onProcess} to determine if any more requests are now needed.
      *
      * @return  {@code true} if requests are needed,
      *          otherwise {@code false}.
@@ -237,7 +231,7 @@ public abstract class RequestProcess
 
     /**
      * Called when the process is being closed.
-     * <p>Use this method in preference to overriding {@link Process#close() close}.
+     * <p>Use this method in preference to overriding {@link #close() close}.
      *
      * @throws  ProcessException
      *          when an exception occurs closing the process.
@@ -247,14 +241,18 @@ public abstract class RequestProcess
     /**
      * Called when the process is being initialised.
      * <p>Use this method in preference to overriding
-     * {@link Process#initialise(lexa.core.data.ConfigData) initialise}.
+     * {@link #initialise(FunctionLibrary, ConfigDataSet) initialise}.
      *
+     * @param   functionLibrary
+     *          a function library to use with the process
      * @param   config
      *          the configuration data for the process.
      * @throws  ProcessException
      *          when an exception occurs initialising the process.
      * @throws  DataException
      *          when an exception occurs in the configuration.
+     * @throws  ExpressionException
+     *          when an exception occurs in an expression.
      */
     public abstract void onInitialise(FunctionLibrary functionLibrary, ConfigDataSet config)
             throws ProcessException,
@@ -264,7 +262,7 @@ public abstract class RequestProcess
     /**
      * Called when the process receives a new request.
      * <p>Use this method in preference to overriding
-     * {@link Process#handleRequest(lexa.core.data.DataSet) handleRequest}.
+     * {@link #handleRequest(lexa.core.data.DataSet) handleRequest}.
      *
      * @param   request
      *          the data for the request.
@@ -276,12 +274,14 @@ public abstract class RequestProcess
     /**
      * Called when the process receives a new reply.
      * <p>Use this method in preference to overriding
-     * {@link Process#handleReply(lexa.core.data.DataSet) handleReply}.
+     * {@link #handleReply(DataSet) handleReply}.
      *
      * @param   reply
      *          the data for the reply.
      * @throws  ProcessException
      *          when an exception occurs handling the reply.
+     * @return  {@code true} if no more replies are expected,
+     *          otherwise {@code false}
      */
     public abstract boolean onReply(DataSet reply) throws ProcessException;
 
@@ -319,7 +319,7 @@ public abstract class RequestProcess
 	{
 		DataSet msg = new ArrayDataSet(this.request)
 				.put(Context.REPLY, this.reply);
-		
+
 		return msg;
 	}
 }

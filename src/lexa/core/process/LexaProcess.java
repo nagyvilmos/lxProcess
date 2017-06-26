@@ -1,18 +1,11 @@
-/*
- * ================================================================================
+/*==============================================================================
  * Lexa - Property of William Norman-Walker
- * --------------------------------------------------------------------------------
+ *------------------------------------------------------------------------------
  * LexaProcess.java
- *--------------------------------------------------------------------------------
+ *------------------------------------------------------------------------------
  * Author:  William Norman-Walker
  * Created: April 2013
- *--------------------------------------------------------------------------------
- * Change Log
- * Date:        By: Ref:        Description:
- * ----------   --- ----------  --------------------------------------------------
- * 2014-07-10	WNW				Renamed to LexaProcess to differenciate from 
- *								java.lang.Process
- *================================================================================
+ *==============================================================================
  */
 package lexa.core.process;
 
@@ -24,7 +17,7 @@ import lexa.core.expression.function.FunctionLibrary;
 
 /**
  * Interface for a process in a message server.
- * <p>The processes are instantiated and controlled by a {@link lexa.core.server.Process}.
+ * <p>The processes are instantiated and controlled by a server.
  * <p>Each process defines how many concurrent requests it can handle.  If there are more
  * requests than processes, then the process can create extra processes to handle the load.
  *
@@ -58,6 +51,7 @@ public interface LexaProcess {
 	 * }
 	 * reply {
 	 * }
+     * </pre>
 	 * @return the message data
 	 */
 	public DataSet getMessageData();
@@ -146,7 +140,8 @@ public interface LexaProcess {
     /**
      * Initialise the process based on the configuration.
      *
-	 * @param functionLibrary
+	 * @param   functionLibrary
+     *          the library to use with this process.
      * @param   config
      *          the configuration for the process.
      *
@@ -154,7 +149,8 @@ public interface LexaProcess {
      *          when an exception has occurred initialising the process.
      * @throws  DataException
      *          when an exception occurs in the configuration.
-	 * @throws lexa.core.expression.ExpressionException
+	 * @throws  lexa.core.expression.ExpressionException
+     *          when an exception has occurred with an expression.
      */
     public void initialise(FunctionLibrary functionLibrary, ConfigDataSet config)
             throws ProcessException,
