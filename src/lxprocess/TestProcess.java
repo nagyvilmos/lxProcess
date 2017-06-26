@@ -87,7 +87,7 @@ public class TestProcess
         this.logger.info("Test:" + this.testName);
         this.testCase = this.testData.getDataSet("processes").getDataSet(this.testName);
         this.logger.info("Config", this.testCase);
-        return TestResult.assignableTo("Config", this.testCase);
+        return TestResult.isClass("lexa.core.data.ArrayDataSet", this.testCase);
     }
 
     @TestAnnotation(order = 10)
@@ -113,7 +113,9 @@ public class TestProcess
         this.factory = new ProcessFactory(loader,config, functionLibrary);
 
         config.close();
-        return TestResult.assignableTo("ProcessFactory", this.factory);
+        String factoryClass = config.get("factory",
+                "lexa.core.process.factory.ProcessFactory").getString();
+        return TestResult.assignableTo(factoryClass, this.factory);
     }
 
     @TestAnnotation(order = 20)
@@ -172,7 +174,7 @@ public class TestProcess
             }
         }
         this.logger.debug("process.end");
-        return TestResult.isNull(this.reply);
+        return TestResult.notNull(this.reply);
     }
 
     @TestAnnotation(order = 50)
