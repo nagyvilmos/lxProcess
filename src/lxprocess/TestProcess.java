@@ -1,7 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/*==============================================================================
+ * Lexa - Property of William Norman-Walker
+ *------------------------------------------------------------------------------
+ * TestProcess.java
+ *------------------------------------------------------------------------------
+ * Author:  William Norman-Walker
+ * Created: February 2017
+ *==============================================================================
  */
 package lxprocess;
 
@@ -21,14 +25,15 @@ import lexa.core.process.ProcessException;
 import lexa.core.process.Status;
 import lexa.core.process.context.Config;
 import lexa.core.process.context.Context;
-import lexa.core.process.factory.InternalLoader;
 import lexa.core.process.factory.ProcessFactory;
 import lexa.test.TestAnnotation;
 import lexa.test.TestClass;
+import lexa.test.TestResult;
 
 /**
- *
+ * Testing class for the process component
  * @author william
+ * @since 2017-02
  */
 @TestAnnotation(arguments = "processList", setUp = "setUpProcess", tearDown = "tearDownProcess")
 public class TestProcess
@@ -76,17 +81,17 @@ public class TestProcess
                 : this.testData.getDataSet("processes").keys();
     }
 
-    public Boolean setUpProcess(Object arg)
+    public TestResult setUpProcess(Object arg)
     {
         this.testName = (String) arg;
         this.logger.info("Test:" + this.testName);
         this.testCase = this.testData.getDataSet("processes").getDataSet(this.testName);
         this.logger.info("Config", this.testCase);
-        return true;
+        return TestResult.assignableTo("Config", this.testCase);
     }
 
     @TestAnnotation(order = 10)
-    public Boolean loadFactory(Object arg) throws ExpressionException, DataException
+    public TestResult loadFactory(Object arg) throws ExpressionException, DataException
     {
         DataSet functions = this.testData.getDataSet("functions");
         DataSet testFunctions = this.testCase.getDataSet("functions");
@@ -101,35 +106,35 @@ public class TestProcess
         FunctionLibrary functionLibrary = new FunctionLibrary(functions);
         ConfigDataSet config = new ConfigDataSet(testCase.getDataSet("process"));
 
-        // if needed we can always get a URLClassLoader to allow 
+        // if needed we can always get a URLClassLoader to allow
         // the explicit listing of jars to load.
         ClassLoader loader = ClassLoader.getSystemClassLoader();
 
         this.factory = new ProcessFactory(loader,config, functionLibrary);
 
         config.close();
-        return true;
+        return TestResult.assignableTo("ProcessFactory", this.factory);
     }
 
     @TestAnnotation(order = 20)
-    public Boolean loadProcess(Object arg) throws ProcessException, DataException, ExpressionException
+    public TestResult loadProcess(Object arg) throws ProcessException, DataException, ExpressionException
     {
         this.process = this.factory.instance();
         this.status = this.process.getStatus();
-        return this.status.active();
+        return TestResult.result(true, this.status.active(), "Loaded process is not activated");
     }
 
     @TestAnnotation(order = 30)
-    public Boolean submitRequest(Object arg) throws ProcessException
+    public TestResult submitRequest(Object arg) throws ProcessException
     {
         process.handleRequest(
                 new ArrayDataSet(testCase.getDataSet(Context.MESSAGE))
         );
-        return true;
+        return TestResult.result(true);
     }
 
     @TestAnnotation(order = 40)
-    public Boolean waitResponse(Object arg) throws ProcessException
+    public TestResult waitResponse(Object arg) throws ProcessException
     {
         this.reply = null;
         DataSet forward = null;
@@ -167,35 +172,26 @@ public class TestProcess
             }
         }
         this.logger.debug("process.end");
-        if (this.reply == null)
-        {
-            this.logger.info("Reply is null");
-            return false;
-        }
-        return true;
+        return TestResult.isNull(this.reply);
     }
 
     @TestAnnotation(order = 50)
-    public Boolean validateResponse(Object arg) throws ProcessException, Exception
+    public TestResult validateResponse(Object arg) throws ProcessException, Exception
     {
         logger.info("Reply received", reply);
-        if (!this.reply.getDataSet(Context.REPLY)
-                .equals(this.testCase.getDataSet("result")))
-        {
-            logger.info("Reply does not match expected result");
-            return false;
-        }
-        logger.info(testName + " completed OKAY");
-        return true;
+        return TestResult.result(
+                this.testCase.getDataSet("result"),
+                this.reply.getDataSet(Context.REPLY),
+                "Reply does not match expected result");
     }
 
-    public Boolean tearDownProcess(Object arg)
+    public TestResult tearDownProcess(Object arg)
     {
         this.process = null;
         this.reply = null;
         this.status = null;
         this.testCase = null;
         this.testName = null;
-        return true;
+        return TestResult.result(true);
     }
 }
