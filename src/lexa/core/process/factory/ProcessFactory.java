@@ -68,7 +68,10 @@ public class ProcessFactory
                 config.getString(Config.CLASS_PATH));
         this.classPath = config.getString(Config.CLASS_PATH);
         this.processConfig = new ArrayDataSet(
-                config.get(Config.CONFIG, null).getDataSet());
+            config.get(
+                Config.CONFIG,
+                config.factory().getDataSet()).getDataSet()
+        );
         this.functionLibrary = functionLibrary;
         String loaderPath=config.get(Config.CLASS_LOADER,
                     InternalLoader.class.getCanonicalName()).getString();

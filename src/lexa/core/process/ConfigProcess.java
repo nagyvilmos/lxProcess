@@ -105,21 +105,24 @@ public class ConfigProcess
     public void onInitialise(FunctionLibrary functionLibrary, ConfigDataSet config)
             throws ProcessException,
                     DataException,
-                    ExpressionException {
+                    ExpressionException
+    {
         this.handleRequest = Expression.parse(
 				config.get(Config.HANDLE_REQUEST, "true").getString(),functionLibrary);
-        this.requests = new HashMap<String, Expression>();
+        this.requests = new HashMap<>();
         if (config.contains(Config.REQUEST_LIST)) {
+            config.validateType(
+                    Config.NEXT_REQUEST, DataType.STRING,
+                    Config.REQUEST_LIST, DataType.DATA_SET
+            );
             this.checkNextRequest = Expression.parse(
 					config.getString(Config.NEXT_REQUEST), functionLibrary);
             ConfigDataSet requestConfig = config.getDataSet(Config.REQUEST_LIST);
-//            for (DataItem item : requestConfig.getAll()) {
-//                this.requests.put(item.getKey(), parser.getExpression(item.getString()));
-//            }
         }
-//        this.buildReply = parser.getExpression(
-//                config.getSetting(Config.BUILD_REPLY));
         if (config.contains(Config.DATA)) {
+            config.validateType(
+                    Config.DATA, DataType.DATA_SET
+            );
             this.data = new ArrayDataSet(config.getDataSet(Config.DATA));
         }
     }

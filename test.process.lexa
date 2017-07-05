@@ -27,7 +27,7 @@ test echo passThrough
 processes {
     echo {
         process {
-			# loader - lexa.core.server.factory.InternalLoader
+			#loader - lexa.core.process.factory.InternalLoader
 			class - Echo
 		}
 		logging {
@@ -49,7 +49,7 @@ processes {
     }
     passThrough {
 		process {
-			# loader - lexa.core.server.factory.InternalLoader
+			# loader - lexa.core.process.factory.InternalLoader
 			class - PassThrough
 			config {
 				allowAnonymous ? false

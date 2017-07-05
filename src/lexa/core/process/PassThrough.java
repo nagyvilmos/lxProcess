@@ -19,6 +19,8 @@ import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.DataItem;
 import lexa.core.data.DataSet;
 import lexa.core.data.ArrayDataSet;
+import lexa.core.data.DataType;
+import lexa.core.data.config.ConfigDataItem;
 import lexa.core.data.exception.DataException;
 import lexa.core.expression.function.FunctionLibrary;
 import lexa.core.process.context.Config;
@@ -65,12 +67,19 @@ public class PassThrough
         if (this.status.active() || this.status.closed()) {
             throw new ProcessException("Process cannot be initialised in current state.");
         }
-        this.allowAnonymous = config.getBoolean(Config.ALLOW_ANONYMOUS);
+        this.allowAnonymous =
+                config.get(Config.ALLOW_ANONYMOUS, false).getBoolean();
         this.messageMap = new ArrayDataSet();
         this.requests = new ArrayDataSet();
-        ConfigDataSet serviceConfig = config.getDataSet(Config.SERVICE_LIST);
+        ConfigDataSet serviceConfig =
+            config
+                .get(Config.SERVICE_LIST,
+                        config.configFactory().getDataSet())
+                .getDataSet();
+
         for (DataItem item : serviceConfig)
         {
+            ((ConfigDataItem)item).getValue().validateType(DataType.STRING);
             this.messageMap.put(item.getKey(),item.getString());
         }
         serviceConfig.close();
