@@ -1,10 +1,10 @@
 /*==============================================================================
  * Lexa - Property of William Norman-Walker
  *------------------------------------------------------------------------------
- * .java
+ * RequestProcess.java (lxProcess)
  *------------------------------------------------------------------------------
  * Author:  William Norman-Walker
- * CreRequestProcessated: August 2013
+ * Created: August 2013
  *==============================================================================
  */
 package lexa.core.process;
@@ -185,12 +185,19 @@ public abstract class RequestProcess
         if (!this.status.acceptRequests()) {
             throw new ProcessException("Process cannot accept requests.");
         }
-        this.onNewRequest(request);
         this.status.setAcceptRequests(false);
+        this.onNewRequest(request);
+
         if (this.hasForwardRequests()) {
             this.status.setRequestPending(true);
-        } else {
+        }
+        else if (this.hasFurtherWork())
+        {
             this.status.setWaitingProcess(true);
+        }
+        else if (this.hasFurtherWork())
+        {
+            this.status.setReplyReady(true);
         }
     }
 

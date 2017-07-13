@@ -38,7 +38,7 @@ public class ProcessTest {
         System.out.println(
                 new TestRun(tests)
                         .execute()
-                        .getReport(false, true)
+                        .getReport(true, true)
         );
 	}
 }

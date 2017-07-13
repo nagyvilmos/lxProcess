@@ -14,6 +14,8 @@ public class Config {
     /** "{@code allowAnonymous}" */
     public static final String ALLOW_ANONYMOUS  = "allowAnonymous";
     /** "{@code loader}" */
+    public static final String CALCULATION      = "calculation";
+    /** "{@code loader}" */
 	public static final String CLASS_LOADER		= "loader";
     /** "{@code classPath}" */
     public static final String CLASS_PATH       = "class";
@@ -21,8 +23,12 @@ public class Config {
     public static final String CONFIG           = "config";
     /** "{@code connectionName}" */
     public static final String CONNECTION_NAME  = "connectionName";
+    /** "{@code data}" */
+    public static final String DATA             = "data";
     /** "{@code buildReply}" */
-    public static final String BUILD_REPLY   = "buildReply";
+    public static final String BUILD_REPLY      = "buildReply";
+    /** "{@code fields}" */
+    public static final String REQUEST_FIELDS   = "requestFields";
     /** "{@code handleRequest}" */
     public static final String HANDLE_REQUEST   = "handleRequest";
     /** "{@code logging}" */
@@ -35,11 +41,13 @@ public class Config {
     public static final String PROCESS_LIST     = "processList";
    /** "{@code serviceList}" */
     public static final String SERVICE_LIST     = "serviceList";
-     /** "{@code timeout}" */
+    /** "{@code reply}" */
+    public static final String REPLY_FIELDS     = "replyFields";
+    /** "{@code timeout}" */
     public static final String TIMEOUT          = "timeout";
     /** "{@code wildcard}" */
     public static final String WILDCARD         = "wildcard";
-    public static final String DATA             = "data";
+
     public static final String REQUEST_LIST     = "requestList";
     public static final String NEXT_REQUEST     = "nextRequest";
     public static final String HOST             = "host";

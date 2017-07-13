@@ -27,6 +27,8 @@ public class Context {
     public static final String CLOSE            = "close";
     /** "{@code connectionId}" */
     public static final String CONNECTION_ID    = "connectionId";
+        /** "{@code data}" */
+    public static final String DATA             = "data";
     /** "{@code message}" */
     public static final String MESSAGE          = "message";
     /** "{@code messageList}" */

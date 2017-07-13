@@ -42,17 +42,23 @@ import lexa.core.process.context.Context;
  */
 public class ConfigProcess
         extends RequestProcess {
+    /** these are the fields the process will accept */
+    private String[] requestFields;
+
+    /** these are the fields the process will return */
+    private String[] replyFields;
 
     /** the current message being processed */
     private DataSet request;
 
+    /** pre validation of the request */
     private Expression handleRequest;
-    private Map<String,Expression> requests;
     private Expression checkNextRequest;
+	private Expression buildReply;
+    private Map<String,Expression> requests;
     private DataSet data;
 	private String nextRequest;
 	private DataSet replyData;
-	private Expression buildReply;
 
     public ConfigProcess() {
 		super();
@@ -107,18 +113,28 @@ public class ConfigProcess
                     DataException,
                     ExpressionException
     {
+        config.validateType(
+                Config.REQUEST_FIELDS,  DataType.STRING,
+                Config.REPLY_FIELDS,    DataType.STRING
+        );
+        this.requestFields = config.getString(Config.REQUEST_FIELDS).split(" ");
+        this.replyFields = config.getString(Config.REPLY_FIELDS).split(" ");
         this.handleRequest = Expression.parse(
 				config.get(Config.HANDLE_REQUEST, "true").getString(),functionLibrary);
-        this.requests = new HashMap<>();
-        if (config.contains(Config.REQUEST_LIST)) {
-            config.validateType(
-                    Config.NEXT_REQUEST, DataType.STRING,
-                    Config.REQUEST_LIST, DataType.DATA_SET
-            );
-            this.checkNextRequest = Expression.parse(
-					config.getString(Config.NEXT_REQUEST), functionLibrary);
-            ConfigDataSet requestConfig = config.getDataSet(Config.REQUEST_LIST);
+        this.requests = new HashMap();
+
+        if (config.contains(Config.BUILD_REPLY))
+        {
+            config.validateType(Config.BUILD_REPLY, DataType.STRING);
+            this.buildReply = Expression.parse(
+                        config.getString(Config.BUILD_REPLY),
+                        functionLibrary);
         }
+        else
+        {
+            this.buildReply = null;
+        }
+
         if (config.contains(Config.DATA)) {
             config.validateType(
                     Config.DATA, DataType.DATA_SET
@@ -130,19 +146,31 @@ public class ConfigProcess
     @Override
     public void onNewRequest(DataSet request)
 			throws ProcessException {
-        this.request = new SealedDataSet(request);
+        this.request = new ArrayDataSet();
+        // white list for fields:
+        for (String field : this.requestFields)
+        {
+            if (request.contains(field))
+            {
+                this.request.put(request.get(field));
+            }
+        }
 		this.nextRequest = null;
 		this.replyData = new ArrayDataSet();
-        try {
+        try
+        {
 			DataSet msg = this.getMessageData();
-			Object result = this.handleRequest.evaluate(msg);
-            if (!(Boolean)result) {
-                if (msg.contains(Context.RETURN)) {
+			Boolean result = (Boolean)this.handleRequest.evaluate(msg);
+            if (!result)
+            {
+                if (msg.contains(Context.RETURN))
+                {
                     throw new ProcessException(msg.getString(Context.RETURN),this.request);
                 }
-                throw new ProcessException("Unhandled call to process.handleRequest",this.request);
-            }
-        } catch (ExpressionException ex) {
+                throw new ProcessException("Unhandled call to process.handleRequest",this.request);            }
+        }
+        catch (ExpressionException ex)
+        {
             throw new ProcessException(ex.getLocalizedMessage(),this.request,ex);
         }
     }
@@ -186,5 +214,4 @@ public class ConfigProcess
 				.put(Context.REPLY, this.replyData);
 		return msg;
 	}
-
 }
