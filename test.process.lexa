@@ -22,7 +22,8 @@
 # }
 
 logFile .\\log\\test.process.log
-test echo passThrough
+#test echo passThrough
+test config
 # ignore config for now
 processes {
     echo {
@@ -95,10 +96,51 @@ processes {
         # a config / exxpression based process
         # *** Incomplete, this does not work yet as no code behind ***
 		process {
-			# loader - lexa.core.server.factory.InternalLoader
+			# loader - lexa.core.process.factory.InternalLoader
 			class - Config
             config {
+                requestFields - ccy
+                handleRequest "
+                    ([data.contains data request.ccy]) ?
+                    (
+                        true
+                    ) : (
+                        return = [string.format "Unknown currency '%1$3s'" request.ccy];
+                        false
+                    )
+                "
+                #buildReply "
+                #	reply.rate
+                #"
 
+                # calculation has datasets request and data:
+                calculation "
+                    ccy - request.ccy;
+                    ccyData - [data.value data ccy];
+                    rate - ccyData.rate
+                "
+
+                # a list of fields [NO dot] to send
+                replyFields - ccy rate
+
+                data {
+                    GBP {
+                        index % 0
+                        rate $ 1.0
+                    }
+                    EUR {
+                        index % 1
+                        rate $ 1.25
+                    }
+                    USD {
+                        index % 2
+                        rate $ 1.50
+                    }
+                    HUF {
+                        index % 40
+                        rate $ 350.0
+                    }
+                }
             }
 		}
 		logging {
@@ -107,7 +149,7 @@ processes {
 				DEBUG ? false
 			}
 		}
-       message {
+        message {
             service - echo
             message - echo
             request {
