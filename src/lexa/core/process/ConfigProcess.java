@@ -53,7 +53,11 @@ public class ConfigProcess
 
     /** pre validation of the request */
     private Expression handleRequest;
+    /** processing of the data */
+    private Expression handleProcess;
+    /** evaluate if any request is outstanding */
     private Expression checkNextRequest;
+    /** build the reply */
 	private Expression buildReply;
     private Map<String,Expression> requests;
     private DataSet data;
@@ -98,8 +102,22 @@ public class ConfigProcess
     }
 
     @Override
-    public boolean hasFurtherWork() throws ProcessException {
-        throw new UnsupportedOperationException("ConfigProcess.hasFurtherWork not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean hasFurtherWork()
+            throws ProcessException
+    {
+        if (this.handleProcess == null)
+        {
+            return false;
+        }
+        DataSet msg = this.getMessageData();
+        try
+        {
+            return (boolean)this.handleProcess.evaluate(msg);
+        }
+        catch (ExpressionException ex)
+        {
+            throw new ProcessException("Error in ConfigProcess.hasFurtherWork",msg, ex);
+        }
     }
 
     @Override
@@ -146,16 +164,28 @@ public class ConfigProcess
     @Override
     public void onNewRequest(DataSet request)
 			throws ProcessException {
-        this.request = new ArrayDataSet();
+        this.request = new ArrayDataSet(request);
+        DataSet context = request.getDataSet(Context.REQUEST);
+        DataSet cleanContext = new ArrayDataSet();
         // white list for fields:
+        String missing = "";
         for (String field : this.requestFields)
         {
-            if (request.contains(field))
+            if (context.contains(field))
             {
-                this.request.put(request.get(field));
+                cleanContext.put(context.get(field));
+            }
+            else
+            {
+                missing = missing + " " + field;
             }
         }
-		this.nextRequest = null;
+        if (!missing.isEmpty())
+        {
+            throw new ProcessException("Missing from request:" + missing,this.request);
+        }
+        this.request.put(Context.REQUEST, cleanContext);
+        this.nextRequest = null;
 		this.replyData = new ArrayDataSet();
         try
         {

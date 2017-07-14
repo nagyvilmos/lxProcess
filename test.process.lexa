@@ -145,24 +145,25 @@ processes {
 			}
 		}
         message {
-            service - echo
-            message - echo
+            service - fx
+            message - fx
             request {
-                testMessage - ### pass through ###
+                ccy - USD
             }
 		}
         replies {
             1 {
-				service	echo
-				message	echo
+				service	fx
+				message	fx
                 source {
                     sourceRef % 1
                 }
 				request {
-                    testMessage	### pass through ###
+                    ccy - USD
                 }
 				reply {
-                    testMessage	### pass through ###
+                    ccy - USD
+                    rate $ 1.50
                 }
 				close ? true
 			}

@@ -195,7 +195,7 @@ public abstract class RequestProcess
         {
             this.status.setWaitingProcess(true);
         }
-        else if (this.hasFurtherWork())
+        else
         {
             this.status.setReplyReady(true);
         }
