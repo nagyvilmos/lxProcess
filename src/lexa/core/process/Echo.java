@@ -66,7 +66,7 @@ public class Echo
 
     @Override
     public boolean hasFurtherWork() throws ProcessException {
-        return false;
+        return (this.reply == null);
     }
 
     @Override

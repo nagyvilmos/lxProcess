@@ -22,19 +22,18 @@
 # }
 
 logFile .\\log\\test.process.log
-#test echo passThrough
-test config
-# ignore config for now
+
+# tests to be run, remove for all.
+# test expression
+
 processes {
-    echo {
+    echoMessage {
         process {
-			#loader - lexa.core.process.factory.InternalLoader
 			class - Echo
 		}
 		logging {
 			* {
 				* ? true
-#				DEBUG ? false
 			}
 		}
         message {
@@ -92,31 +91,30 @@ processes {
 			testMessage	- ### pass through ###
 		}
 	}
-    config {
-        # a config / exxpression based process
+    expression {
+        # a config / expression based process
         # *** Incomplete, this does not work yet as no code behind ***
 		process {
-			# loader - lexa.core.process.factory.InternalLoader
 			class - Config
             config {
-                requestFields - ccy
-                handleRequest "
-                    ([data.contains data request.ccy]) ?
+                # list of fields accepted from the request
+                requestFieldList - ccy
+                # expression to validate the request
+                requestExpression "
+                    ([contains data request.ccy]) ?
                     (
                         true
                     ) : (
-                        return = [string.format "Unknown currency '%1$3s'" request.ccy];
+                        return = [format "Unknown currency '%1$3s'" request.ccy];
                         false
                     )
                 "
-                buildReply "
-                    ccy - request.ccy;
-                    ccyData - [data.value data ccy];
+                # map to build up the reply
+                replyMap {
+                    ccy - request.ccy
+                    ccyData - [value data ccy]
                     rate - ccyData.rate
-                "
-
-                # a list of fields [NO dot] to send
-                replyFields - ccy rate
+                }
 
                 data {
                     GBP {

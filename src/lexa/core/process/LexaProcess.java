@@ -18,9 +18,10 @@ import lexa.core.expression.function.FunctionLibrary;
 /**
  * Interface for a process in a message server.
  * <p>The processes are instantiated and controlled by a server.
- * <p>Each process defines how many concurrent requests it can handle.  If there are more
- * requests than processes, then the process can create extra processes to handle the load.
- *
+ * <p>Each process defines how many concurrent requests it can handle. If there
+ * are more requests than processes, then the server can create extra processes
+ * to handle the load.
+ * <p>Each process supports a status that can be
  * @author William
  * @since 2013-04
  */

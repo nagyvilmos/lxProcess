@@ -17,6 +17,7 @@ import lexa.core.data.exception.DataException;
 import lexa.core.expression.Expression;
 import lexa.core.expression.ExpressionException;
 import lexa.core.expression.function.FunctionLibrary;
+import lexa.core.expression.map.*;
 import lexa.core.process.context.Config;
 import lexa.core.process.context.Context;
 
@@ -26,17 +27,33 @@ import lexa.core.process.context.Context;
  * to determine the outcome.
  * <p>The configuration of this is as follows:
  * <pre>
- * handleRequest &lt;handleRequest expression&gt;
+ * requestFieldList - &lt;input fields&gt;
+ * requestExpression - &lt;request expression&gt;
+ * replyMap {
+ *   &lt;reply mapping&gt;
+ * }
  * data {
  *   &lt;data config&gt;
  * }
  * </pre>
  * <p>Where:
  * <dl>
- * <dt>&lt;handleRequest expression&gt;</dt><dd>an expression to determine if the request is valid.
- *          This must return {@code true} or {@code false}.</dd>
- * <dt>&lt;data config&gt;</dt><dd>any data used to drive the configuration; such as look up codes.</dd>
+ * <dt>{@code input fields}</dt>
+ *      <dd>A space separated list of field names.</dd>
+ * <dt>{@code request expression}</dt>
+ *      <dd>An expression to evaluate if the
+ *      request can be handled by the process; return is {@link Boolean}.
+ *      If the request cannot be handled, then the field {@code return} should
+ *      be assigned a user friendly message.</dd>
+ * <dt>{@code reply mapping}</dt>
+ *      <dd>An {@link ExpressionMap} to build the reply</dd>
+ * <dt>{@code ...}</dt>
+ *      <dd> ... </dd>
+ * <dt>{@code data config}</dt>
+ *      <dd>any data used to drive the configuration;
+ *      such as look up codes.</dd>
  * </dl>
+ *
  * @author William
  * @since 2013-08
  */
@@ -44,21 +61,20 @@ public class ConfigProcess
         extends RequestProcess {
     /** these are the fields the process will accept */
     private String[] requestFields;
-
-    /** these are the fields the process will return */
-    private String[] replyFields;
+    /** pre validation of the request */
+    private Expression requestExpression;
+    /** map to build the reply */
+    private ExpressionMap replyMap;
 
     /** the current message being processed */
     private DataSet request;
 
-    /** pre validation of the request */
-    private Expression handleRequest;
     /** processing of the data */
-    private Expression handleProcess;
+    private Expression handleProcessExpression;
     /** evaluate if any request is outstanding */
-    private Expression checkNextRequest;
+    private Expression checkNextRequestExpression;
     /** build the reply */
-	private Expression buildReply;
+	private Expression buildReplyExpression;
     private Map<String,Expression> requests;
     private DataSet data;
 	private String nextRequest;
@@ -85,12 +101,12 @@ public class ConfigProcess
 
     @Override
     public boolean hasForwardRequests() throws ProcessException {
-        if (this.checkNextRequest == null) {
+        if (this.checkNextRequestExpression == null) {
             return false;
         }
         String next;
         try {
-            next = (String)this.checkNextRequest.evaluate(request);
+            next = (String)this.checkNextRequestExpression.evaluate(request);
         } catch (ExpressionException ex) {
             throw new ProcessException(ex.getLocalizedMessage(),this.request,ex);
         }
@@ -105,14 +121,14 @@ public class ConfigProcess
     public boolean hasFurtherWork()
             throws ProcessException
     {
-        if (this.handleProcess == null)
+        if (this.handleProcessExpression == null)
         {
             return false;
         }
         DataSet msg = this.getMessageData();
         try
         {
-            return (boolean)this.handleProcess.evaluate(msg);
+            return (boolean)this.handleProcessExpression.evaluate(msg);
         }
         catch (ExpressionException ex)
         {
@@ -132,33 +148,31 @@ public class ConfigProcess
                     ExpressionException
     {
         config.validateType(
-                Config.REQUEST_FIELDS,  DataType.STRING,
-                Config.REPLY_FIELDS,    DataType.STRING
+                Config.REQUEST_FIELD_LIST,  DataType.STRING,
+                Config.REPLY_MAP,           DataType.DATA_SET
         );
-        this.requestFields = config.getString(Config.REQUEST_FIELDS).split(" ");
-        this.replyFields = config.getString(Config.REPLY_FIELDS).split(" ");
-        this.handleRequest = Expression.parse(
-				config.get(Config.HANDLE_REQUEST, "true").getString(),functionLibrary);
-        this.requests = new HashMap();
+        this.requestFields =
+                config.getString(Config.REQUEST_FIELD_LIST).split(" ");
 
-        if (config.contains(Config.BUILD_REPLY))
-        {
-            config.validateType(Config.BUILD_REPLY, DataType.STRING);
-            this.buildReply = Expression.parse(
-                        config.getString(Config.BUILD_REPLY),
-                        functionLibrary);
-        }
-        else
-        {
-            this.buildReply = null;
-        }
+        this.requestExpression = config.contains(Config.REQUEST_EXPRESSION) ?
+                Expression.parse(config.getString(Config.REQUEST_EXPRESSION),functionLibrary) :
+                null;
+        this.replyMap = new ExpressionMap(
+                config.getDataSet(Config.REPLY_MAP), functionLibrary);
 
-        if (config.contains(Config.DATA)) {
+        if (config.contains(Config.DATA))
+        {
             config.validateType(
                     Config.DATA, DataType.DATA_SET
             );
             this.data = new ArrayDataSet(config.getDataSet(Config.DATA));
         }
+        else
+        {
+            this.data = null;
+        }
+
+        this.requests = new HashMap();
     }
 
     @Override
@@ -190,7 +204,7 @@ public class ConfigProcess
         try
         {
 			DataSet msg = this.getMessageData();
-			Boolean result = (Boolean)this.handleRequest.evaluate(msg);
+			Boolean result = (Boolean)this.requestExpression.evaluate(msg);
             if (!result)
             {
                 if (msg.contains(Context.RETURN))
@@ -219,7 +233,7 @@ public class ConfigProcess
 	public DataSet buildReply()
 			throws ProcessException
 	{
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new MapDataSet(replyMap, this.getMessageData());
 	}
 
 	/**

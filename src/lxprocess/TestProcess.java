@@ -50,6 +50,7 @@ public class TestProcess
     private DataSet reply;
     private Status status;
     private DataSet testCase;
+
     private String testName;
 
     public TestProcess(String fileName)
