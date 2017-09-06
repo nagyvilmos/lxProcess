@@ -74,11 +74,10 @@ public class Status {
             this.active = false;
         }
         this.acceptRequests = this.acceptRequests && this.active;
-        this.replyReady = this.replyReady && this.active;
         this.requestPending = this.requestPending && this.active;
         this.waitingProcess = this.waitingProcess && this.active;
         this.waitingReply = this.waitingReply && this.active;
-
+        this.replyReady = this.replyReady && this.active;
     }
 
     /**
@@ -120,6 +119,17 @@ public class Status {
         return this.closed;
     }
 
+    /**
+     * Get the current status
+     * <p>The current status is the one that takes the highest priority to be
+     * handled.
+     *
+     * @return  the current status.
+     */
+    public Type getCurrent()
+    {
+       return Status.Type.getCurrent(this);
+    }
     /**
      * Indicates if a reply is ready.
      *
@@ -210,8 +220,69 @@ public class Status {
     @Override
     public String toString()
     {
-        return "Status{" + "active=" + active + ", closed=" + closed + ", acceptRequests=" + acceptRequests + ", replyReady=" + replyReady + ", requestPending=" + requestPending + ", waitingProcess=" + waitingProcess + ", waitingReply=" + waitingReply + '}';
+        return "Status{active=" + this.active +
+                ", closed=" + this.closed +
+                ", acceptRequests=" + this.acceptRequests +
+                ", replyReady=" + this.replyReady +
+                ", requestPending=" + this.requestPending +
+                ", waitingProcess=" + this.waitingProcess +
+                ", waitingReply=" + waitingReply + '}';
     }
 
+    /**
+     * Status as an enumeration
+     * <p>Each status is in the list in it's order or precedence and is used
+     */
+    public enum Type
+    {
+        /** Closed */
+        CLOSED,
+        /** Reply ready */
+        REPLY_READY,
+        /** Reply ready */
+        REQUEST_PENDING,
+        /** Waiting process */
+        WAITING_PEOCESS,
+        /** Accept requests */
+        ACCEPT_REQUESTS,
+        /** Waiting reply */
+        WAITING_REPLY,
+        /** Active */
+        ACTIVE,
+        /** Unknown */
+        UNKNOWN;
 
+        private static Type getCurrent(Status status)
+        {
+            if(status.closed())
+            {
+                return Type.CLOSED;
+            }
+            if(status.replyReady())
+            {
+                return Type.REPLY_READY;
+            }
+            if(status.requestPending())
+            {
+                return Type.REQUEST_PENDING;
+            }
+            if(status.waitingProcess())
+            {
+                return Type.WAITING_PEOCESS;
+            }
+            if(status.acceptRequests())
+            {
+                return Type.ACCEPT_REQUESTS;
+            }
+            if(status.waitingReply())
+            {
+                return Type.WAITING_REPLY;
+            }
+            if(status.active())
+            {
+                return Type.ACTIVE;
+            }
+            return Type.UNKNOWN;
+        }
+    }
 }
