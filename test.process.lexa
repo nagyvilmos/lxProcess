@@ -29,6 +29,7 @@ logFile .\\log\\test.process.log
 processes {
     echoMessage {
         process {
+            name - Echo Test
 			class - Echo
 		}
 		logging {

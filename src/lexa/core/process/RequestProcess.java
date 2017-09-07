@@ -88,16 +88,12 @@ public abstract class RequestProcess
         if (!this.status.replyReady()) {
             throw new ProcessException("Process has no replies ready.");
         }
-        DataSet reply = this.buildReply();
+        DataSet messageReply = this.buildReply();
 
+        // update the status then switch off reply ready.
+        this.updateStatus();
         this.status.setReplyReady(false);
-        if (this.hasFurtherWork()) {
-            this.status.setWaitingProcess(true);
-        } else {
-            reply.put(Context.CLOSE,true);
-            this.status.setAcceptRequests(true);
-        }
-        return reply;
+        return messageReply;
     }
 
     /**
@@ -187,18 +183,7 @@ public abstract class RequestProcess
         }
         this.status.setAcceptRequests(false);
         this.onNewRequest(request);
-
-        if (this.hasForwardRequests()) {
-            this.status.setRequestPending(true);
-        }
-        else if (this.hasFurtherWork())
-        {
-            this.status.setWaitingProcess(true);
-        }
-        else
-        {
-            this.status.setReplyReady(true);
-        }
+        this.updateStatus();
     }
 
     /**
@@ -216,7 +201,7 @@ public abstract class RequestProcess
     /**
      * Called to determine if the process has further work after replying.
      *
-     * @return  {@code true} if the process has further,
+     * @return  {@code true} if the process has further work,
      *          otherwise {@code false}.
      * @throws  ProcessException
      *          when an exception occurs checking for further work.
@@ -312,6 +297,28 @@ public abstract class RequestProcess
         if (this.hasForwardRequests()) {
             this.status.setRequestPending(true);
         } else {
+            this.status.setReplyReady(true);
+        }
+    }
+
+    /**
+     * Update the status while processing a message.
+     *
+     * @throws  ProcessException
+     *          when an exception occurs performing the processing.
+     */
+    private void updateStatus()
+            throws ProcessException
+    {
+        if (this.hasForwardRequests()) {
+            this.status.setRequestPending(true);
+        }
+        else if (this.hasFurtherWork())
+        {
+            this.status.setWaitingProcess(true);
+        }
+        else
+        {
             this.status.setReplyReady(true);
         }
     }

@@ -145,33 +145,45 @@ public class TestProcess
         this.logger.debug("process.start");
         while (busy)
         {
-            this.logger.debug("process.status",null, this.status );
-            if (this.status.waitingProcess())
+            this.logger.debug("process.status\n",null, this.status);
+            switch (this.status.getCurrent())
             {
-                this.process.process();
-            } else if (this.status.requestPending())
-            {
-                // take the request and dummy the reply from the config:
-                forward = process.getRequests();
-                this.logger.debug("Forward requests", forward);
-            } else if (this.status.waitingReply())
-            {
-                DataSet replies = this.testCase.getDataSet("replies");
-                for (DataItem request : forward.getDataSet(Context.MESSAGE_LIST))
+                case WAITING_PEOCESS :
                 {
-                    String mid = request.getKey();
-                    if (!replies.contains(mid))
-                    {
-                        throw new java.lang.UnsupportedOperationException("No reply in replies block for message " + mid);
-                    }
-                    process.handleReply(replies.getDataSet(mid));
+                    this.process.process();
+                    break;
                 }
-            } else if (this.status.replyReady())
-            {
-                this.reply = this.process.getReply();
-            } else
-            {
-                busy = false; //this.status.active();
+                case REQUEST_PENDING :
+                {
+                    // take the request and dummy the reply from the config:
+                    forward = process.getRequests();
+                    this.logger.debug("Forward requests", forward);
+                    break;
+                }
+                case WAITING_REPLY :
+                {
+                    DataSet replies = this.testCase.getDataSet("replies");
+                    for (DataItem request : forward.getDataSet(Context.MESSAGE_LIST))
+                    {
+                        String mid = request.getKey();
+                        if (!replies.contains(mid))
+                        {
+                            throw new java.lang.UnsupportedOperationException(
+                                    "No reply in replies block for message " + mid);
+                        }
+                        process.handleReply(replies.getDataSet(mid));
+                    }
+                    break;
+                }
+                case REPLY_READY :
+                {
+                    this.reply = this.process.getReply();
+                    break;
+                }
+                default:
+                {
+                    busy = false; //this.status.active();
+                }
             }
         }
         this.logger.debug("process.end");

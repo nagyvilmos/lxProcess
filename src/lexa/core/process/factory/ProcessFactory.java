@@ -84,7 +84,7 @@ public class ProcessFactory
 		{
 			String msg = "Unable to instantiate the class loader @ " +  loaderPath;
 			this.logger.error(msg,processConfig, ex, config);
-			throw new DataException(classPath);
+			throw new DataException(this.classPath);
 		}
 		this.loader.initialise(classPath);
     }

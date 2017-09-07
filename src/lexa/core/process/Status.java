@@ -239,7 +239,7 @@ public class Status {
         CLOSED,
         /** Reply ready */
         REPLY_READY,
-        /** Reply ready */
+        /** request pending */
         REQUEST_PENDING,
         /** Waiting process */
         WAITING_PEOCESS,

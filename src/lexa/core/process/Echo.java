@@ -1,19 +1,11 @@
-/*
- * ================================================================================
+/*==============================================================================
  * Lexa - Property of William Norman-Walker
- * --------------------------------------------------------------------------------
- * Echo.java
- *--------------------------------------------------------------------------------
+ *------------------------------------------------------------------------------
+ * Echo.java (lxProcess)
+ *------------------------------------------------------------------------------
  * Author:  William Norman-Walker
  * Created: April 2013
- *--------------------------------------------------------------------------------
- * Change Log
- * Date:        By: Ref:        Description:
- * ----------   --- ----------  --------------------------------------------------
- * 2013-08-10   WNW -           Changed to use RequestProcess
- * 2015-03-11	WNW	2015-03		Updated in line with new lxData
- * 2016-08-30	WNW	2016-08		Replace clone of DataSet with copy constructors
- *================================================================================
+ *==============================================================================
  */
 package lexa.core.process;
 
@@ -27,15 +19,17 @@ import lexa.core.process.context.Context;
 
 /**
  * Test process using a simple echo.
+ *
  * <p>Configured as:
  * <pre>
- * &lt;process&gt; {
+ * {
  *   name &lt;process description&gt;
- *   classPath internal:echo
+ *   classPath Echo
  * }
  * </pre>
  *
- * <p>The returned reply will be a copy of the request; no further processing takes place.
+ * <p>The returned reply will be a copy of the request; no further processing
+ * takes place.
  *
  * @author William
  * @since 2013-04
@@ -43,6 +37,7 @@ import lexa.core.process.context.Context;
 public class Echo
         extends RequestProcess {
 
+    /** request context to be returned */
     private DataSet context;
     /** the last reply created */
     private DataSet reply;
@@ -85,6 +80,7 @@ public class Echo
     @Override
     public void onNewRequest(DataSet request) throws ProcessException {
         this.context = request;
+        this.reply = null;
     }
 
     @Override
