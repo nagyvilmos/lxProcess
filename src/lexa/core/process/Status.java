@@ -235,14 +235,14 @@ public class Status {
      */
     public enum Type
     {
-        /** Closed */
+        /** Closed *//** Closed */
         CLOSED,
         /** Reply ready */
         REPLY_READY,
         /** request pending */
         REQUEST_PENDING,
         /** Waiting process */
-        WAITING_PEOCESS,
+        WAITING_PROCESS,
         /** Accept requests */
         ACCEPT_REQUESTS,
         /** Waiting reply */
@@ -268,15 +268,15 @@ public class Status {
             }
             if(status.waitingProcess())
             {
-                return Type.WAITING_PEOCESS;
-            }
-            if(status.acceptRequests())
-            {
-                return Type.ACCEPT_REQUESTS;
+                return Type.WAITING_PROCESS;
             }
             if(status.waitingReply())
             {
                 return Type.WAITING_REPLY;
+            }
+            if(status.acceptRequests())
+            {
+                return Type.ACCEPT_REQUESTS;
             }
             if(status.active())
             {

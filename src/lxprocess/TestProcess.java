@@ -11,9 +11,7 @@ package lxprocess;
 
 import java.io.File;
 import java.io.IOException;
-import lexa.core.data.DataItem;
-import lexa.core.data.DataSet;
-import lexa.core.data.ArrayDataSet;
+import lexa.core.data.*;
 import lexa.core.data.config.ConfigDataSet;
 import lexa.core.data.exception.DataException;
 import lexa.core.data.io.DataReader;
@@ -148,7 +146,7 @@ public class TestProcess
             this.logger.debug("process.status\n",null, this.status);
             switch (this.status.getCurrent())
             {
-                case WAITING_PEOCESS :
+                case WAITING_PROCESS :
                 {
                     this.process.process();
                     break;
@@ -177,7 +175,8 @@ public class TestProcess
                 }
                 case REPLY_READY :
                 {
-                    this.reply = this.process.getReply();
+                    this.reply = ArrayFactory.factory.clone(
+                            this.process.getReply());
                     break;
                 }
                 default:

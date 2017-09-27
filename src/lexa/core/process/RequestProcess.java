@@ -15,6 +15,7 @@ import lexa.core.data.ArrayDataSet;
 import lexa.core.data.exception.DataException;
 import lexa.core.expression.ExpressionException;
 import lexa.core.expression.function.FunctionLibrary;
+import lexa.core.logging.*;
 import lexa.core.process.context.Context;
 
 /**
@@ -28,6 +29,8 @@ import lexa.core.process.context.Context;
 public abstract class RequestProcess
         implements LexaProcess {
 
+    /** logger for information */
+    protected Logger logger;
     /** the current status */
     private final Status status;
     /** Unique id assigned to the process */
@@ -45,6 +48,7 @@ public abstract class RequestProcess
      * creates a new process
      */
     public RequestProcess() {
+        this.logger = new Logger(this.getClass().getSimpleName(), null);
         this.status = new Status();
     }
 
@@ -213,7 +217,7 @@ public abstract class RequestProcess
             throws ProcessException,
                     DataException,
                     ExpressionException {
-        if (this.status.active() || this.status.closed()) {
+        if (!this.status.getCurrent().equals(Status.Type.UNKNOWN)) {
             throw new ProcessException("Process cannot be initialised in current state.");
         }
         this.onInitialise(functionLibrary, config);

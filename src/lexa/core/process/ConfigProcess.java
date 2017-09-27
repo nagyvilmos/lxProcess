@@ -23,8 +23,8 @@ import lexa.core.process.context.Context;
 
 /**
  * A process that is managed via configuration.
- * <p>Each step on the process is configured using an {@link lexa.core.expression.Expression}
- * to determine the outcome.
+ * <p>Each step on the process is configured using an
+ * {@link lexa.core.expression.Expression} to determine the outcome.
  * <p>The configuration of this is as follows:
  * <pre>
  * requestFieldList - &lt;input fields&gt;
@@ -155,7 +155,9 @@ public class ConfigProcess
                 config.getString(Config.REQUEST_FIELD_LIST).split(" ");
 
         this.requestExpression = config.contains(Config.REQUEST_EXPRESSION) ?
-                Expression.parse(config.getString(Config.REQUEST_EXPRESSION),functionLibrary) :
+                Expression.parse(
+                        config.getString(
+                                Config.REQUEST_EXPRESSION),functionLibrary) :
                 null;
         this.replyMap = new ExpressionMap(
                 config.getDataSet(Config.REPLY_MAP), functionLibrary);
@@ -209,9 +211,11 @@ public class ConfigProcess
             {
                 if (msg.contains(Context.RETURN))
                 {
-                    throw new ProcessException(msg.getString(Context.RETURN),this.request);
+                    throw new ProcessException(
+                            msg.getString(Context.RETURN),this.request);
                 }
-                throw new ProcessException("Unhandled call to process.handleRequest",this.request);            }
+                throw new ProcessException(
+                        "Unhandled call to process.handleRequest",this.request);            }
         }
         catch (ExpressionException ex)
         {
@@ -221,12 +225,28 @@ public class ConfigProcess
 
     @Override
     public boolean onReply(DataSet reply) throws ProcessException {
-        throw new UnsupportedOperationException("ConfigProcess.onReply not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "ConfigProcess.onReply not supported yet.");
     }
 
     @Override
     public void onProcess() throws ProcessException {
-        throw new UnsupportedOperationException("ConfigProcess.onProcess not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.handleProcessExpression == null)
+        {
+            return;
+        }
+        try
+        {
+            this.handleProcessExpression.evaluate(
+                    this.getMessageData()
+            );
+        }
+        catch (ExpressionException ex)
+        {
+            this.logger.error("Unable to evaluate process", this.request, ex);
+            throw new ProcessException(
+                    "Unable to evaluate process", this.request, ex);
+        }
     }
 
 	@Override

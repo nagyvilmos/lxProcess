@@ -24,12 +24,11 @@
 logFile .\\log\\test.process.log
 
 # tests to be run, remove for all.
-# test expression
+#test expression
 
 processes {
     echoMessage {
         process {
-            name - Echo Test
 			class - Echo
 		}
 		logging {
@@ -106,15 +105,14 @@ processes {
                     (
                         true
                     ) : (
-                        return = [format "Unknown currency '%1$3s'" request.ccy];
+                        return = [format "Unknown currency '%s'" request.ccy];
                         false
                     )
                 "
                 # map to build up the reply
                 replyMap {
                     ccy - request.ccy
-                    ccyData - [value data ccy]
-                    rate - ccyData.rate
+                    rate - [value [value data ccy] "rate"]
                 }
 
                 data {
@@ -140,7 +138,7 @@ processes {
 		logging {
 			* {
 				* ? true
-				DEBUG ? false
+#				DEBUG ? false
 			}
 		}
         message {

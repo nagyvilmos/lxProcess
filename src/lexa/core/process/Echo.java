@@ -22,8 +22,7 @@ import lexa.core.process.context.Context;
  *
  * <p>Configured as:
  * <pre>
- * {
- *   name &lt;process description&gt;
+ * &lt;process&gt; {
  *   classPath Echo
  * }
  * </pre>
